@@ -194,21 +194,21 @@
 
         <!-- SEARCH CARD -->
         <div class="card no-print" id="searchCard">
-            <h2>📦 Suivi de colis COD</h2>
-            <p class="subtitle">Entrez votre numéro de suivi DHL pour consulter votre reçu</p>
-            <div class="alert-info">🔒 Service DHL Maroc — Paiement à la livraison (COD)</div>
+            <h2>📦 DHL Tracking — Spedizione COD</h2>
+            <p class="subtitle">Inserisci il numero di tracking DHL per visualizzare la ricevuta</p>
+            <div class="alert-info">🔒 DHL Express Egypt → Italy · Pagamento alla consegna (COD)</div>
             <form id="searchForm">
                 <div class="search-box">
-                    <input type="text" id="trackingInput" placeholder="Ex: JD1234567890" required autocomplete="off">
-                    <button type="submit">Rechercher</button>
+                    <input type="text" id="trackingInput" placeholder="Es: JD1234567890" required autocomplete="off">
+                    <button type="submit">Cerca</button>
                 </div>
             </form>
             <div class="error-msg" id="errorMsg">
-                ❌ Numéro de suivi introuvable. Veuillez vérifier et réessayer.
+                ❌ Numero di tracking non trovato. Verifica e riprova.
             </div>
         </div>
 
-        <!-- ===== RICEVUTA DHL AUTHENTIQUE ===== -->
+        <!-- ===== RICEVUTA DHL ===== -->
         <div class="ricevuta-container no-print" id="ricevutaContainer">
             <div class="ricevuta" id="ricevuta">
                 
@@ -217,12 +217,12 @@
                     <div class="ricevuta-header-left">
                         <img src="https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg" alt="DHL">
                         <div class="header-title">
-                            BON DE LIVRAISON / REÇU COD
-                            <small>DHL Express Maroc — Document officiel</small>
+                            DOCUMENTO DI TRASPORTO / RICEVUTA COD
+                            <small>DHL Express Egypt → Italy · Documento ufficiale</small>
                         </div>
                     </div>
                     <div class="ricevuta-header-right">
-                        <span class="cod-badge">PAIEMENT À LA LIVRAISON</span>
+                        <span class="cod-badge">PAGAMENTO ALLA CONSEGNA</span>
                     </div>
                 </div>
                 
@@ -230,37 +230,37 @@
                     
                     <!-- REF LINE -->
                     <div class="ricevuta-ref">
-                        <span class="ref-label">Référence DHL</span>
+                        <span class="ref-label">Riferimento DHL</span>
                         <span class="ref-number" id="refNumber">DHL-COD-2026-XXXXXXXX</span>
                     </div>
                     
                     <!-- STATUS -->
                     <div class="status-bar">
-                        <span>✅</span> Spedizione in corso — Préparer le montant COD
+                        <span>✅</span> Spedizione in transito — Preparare l'importo COD
                     </div>
 
-                    <!-- ===== MITTENTE (MITTENTE) ===== -->
+                    <!-- ===== MITTENTE (EGITTO) ===== -->
                     <div class="ricevuta-section-full">
-                        <div class="ricevuta-section-title">📤 MITTENTE (EXPÉDITEUR) — ITALIA</div>
+                        <div class="ricevuta-section-title">📤 MITTENTE (SPEDITORE) — EGITTO · SHARM EL SHEIKH</div>
                         <div style="background:#fff8e1;border-radius:4px;padding:10px 14px;border-left:3px solid #ff8f00;">
                             <div class="ricevuta-row">
-                                <span class="r-label">Nome / Nom</span>
+                                <span class="r-label">Nome / Name</span>
                                 <span class="r-value" id="rMittenteNome" style="font-weight:700;">—</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Indirizzo / Adresse</span>
+                                <span class="r-label">Indirizzo / Address</span>
                                 <span class="r-value" id="rMittenteAddr">—</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Città / Ville</span>
+                                <span class="r-label">Città / City</span>
                                 <span class="r-value" id="rMittenteCitta">—</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">CAP / Code postal</span>
+                                <span class="r-label">CAP / Postal Code</span>
                                 <span class="r-value" id="rMittenteCAP">—</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Tel / Telefono</span>
+                                <span class="r-label">Tel / Phone</span>
                                 <span class="r-value" id="rMittenteTel">—</span>
                             </div>
                             <div class="ricevuta-row">
@@ -277,7 +277,7 @@
                         <div class="ricevuta-section">
                             <div class="ricevuta-section-title">📦 DATI SPEDIZIONE</div>
                             <div class="ricevuta-row">
-                                <span class="r-label">N° Tracking</span>
+                                <span class="r-label">Tracking N°</span>
                                 <span class="r-value" id="rTracking" style="color:#d40511;font-weight:700;">—</span>
                             </div>
                             <div class="ricevuta-row">
@@ -289,24 +289,28 @@
                                 <span class="r-value">DHL Express COD</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Stato / Statut</span>
+                                <span class="r-label">Stato / Status</span>
                                 <span class="r-value" style="color:#2e7d32;">In transito</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Peso / Poids</span>
+                                <span class="r-label">Peso / Weight</span>
                                 <span class="r-value" id="rPeso">—</span>
                             </div>
                             <div class="ricevuta-row">
                                 <span class="r-label">Dimensioni</span>
                                 <span class="r-value" id="rDimensioni">—</span>
                             </div>
+                            <div class="ricevuta-row">
+                                <span class="r-label">Rotta / Route</span>
+                                <span class="r-value" style="color:#d40511;font-weight:700;">Sharm El Sheikh → Italia</span>
+                            </div>
                         </div>
                         
-                        <!-- COL 2: Destinatario -->
+                        <!-- COL 2: Destinatario (Italia) -->
                         <div class="ricevuta-section">
-                            <div class="ricevuta-section-title">👤 DESTINATARIO (MAROCCO)</div>
+                            <div class="ricevuta-section-title">👤 DESTINATARIO — ITALIA</div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Nome / Nom</span>
+                                <span class="r-label">Nome / Name</span>
                                 <span class="r-value" id="rNom">—</span>
                             </div>
                             <div class="ricevuta-row">
@@ -314,11 +318,15 @@
                                 <span class="r-value" id="rAdresse">—</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Città / Ville</span>
+                                <span class="r-label">Città / City</span>
                                 <span class="r-value" id="rVille">—</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Tel / Téléphone</span>
+                                <span class="r-label">CAP / Postal Code</span>
+                                <span class="r-value" id="rCapDest">—</span>
+                            </div>
+                            <div class="ricevuta-row">
+                                <span class="r-label">Tel / Phone</span>
                                 <span class="r-value" id="rTelephone">—</span>
                             </div>
                             <div class="ricevuta-row">
@@ -331,8 +339,8 @@
                     <!-- COD BOX -->
                     <div class="ricevuta-cod">
                         <div class="ricevuta-cod-left">
-                            <div class="cod-label">💰 Importo COD / Montant à payer</div>
-                            <div class="cod-sub">Contrassegno · Pagamento alla consegna</div>
+                            <div class="cod-label">💰 Importo COD (Contrassegno)</div>
+                            <div class="cod-sub">Pagamento alla consegna · Contanti / Carta</div>
                         </div>
                         <div class="cod-price" id="rCOD">0,00 €</div>
                     </div>
@@ -340,11 +348,11 @@
                     <!-- Payment Info -->
                     <div class="payment-info">
                         <span><strong>Metodo di pagamento :</strong> Contanti alla consegna</span>
-                        <span><strong>Scadenza :</strong> Alla ricezione</span>
+                        <span><strong>Valuta :</strong> Euro (€)</span>
                     </div>
                     
                     <div style="font-size:0.68rem;color:#aaa;text-align:center;padding:6px 0;">
-                        Documento di trasporto DHL · Conservare per eventuali reclami
+                        Documento di trasporto DHL Express Egypt · Conservare per eventuali reclami
                     </div>
                 </div>
                 
@@ -352,17 +360,17 @@
                 <div class="ricevuta-footer">
                     <div class="ricevuta-footer-grid">
                         <div class="ricevuta-footer-item">
-                            <strong>DHL Express Italy</strong>
-                            Servizio Clienti: +39 02 1234 5678
+                            <strong>DHL Express Egypt</strong>
+                            Servizio Clienti: +20 69 366 1111
                         </div>
                         <div class="ricevuta-footer-item">
-                            <strong>DHL Maroc</strong>
-                            Service Client: 05 22 45 67 89
+                            <strong>DHL Express Italy</strong>
+                            Servizio Clienti: +39 02 1234 5678
                         </div>
                     </div>
                     <div class="barcode">| || |  || | ||| | || ||| || || | || ||| | || ||| |||</div>
                     <div class="ricevuta-actions">
-                        <button class="btn-print">🖨️ Stampa / Imprimer</button>
+                        <button class="btn-print">🖨️ Stampa</button>
                         <button class="btn-back" onclick="backToSearch()">⬅️ Nuova ricerca</button>
                     </div>
                 </div>
@@ -373,25 +381,24 @@
     </div>
 
     <script>
-        // Database tracking
+        // Database tracking — Sharm El Sheikh → Italy
         var trackingData = {
             "JDCRI0VRT778": {
-                // MITTENTE (Italiano)
                 mittente: {
-                    nome: "Ferrari Marco",
-                    indirizzo: "Via Roma 234, Presso Ufficio Postale",
-                    citta: "Milano (MI)",
-                    cap: "20145",
-                    telefono: "+39 338 351 1823",
-                    email: "marco.ferrari@libero.it"
+                    nome: "Mohamed El-Sayed",
+                    indirizzo: "Naama Bay, Hotel Concorde, 5th floor",
+                    citta: "Sharm El Sheikh, South Sinai",
+                    cap: "87631",
+                    telefono: "+20 12 3456 7890",
+                    email: "m.elsayed@sharmhotels.com"
                 },
-                // DESTINATARIO (Marocchino)
                 destinatario: {
                     nome: "Vacca Cristina",
-                    indirizzo: "C/o uff postale Portoscuso Via Napoli 12",
+                    indirizzo: "Via Napoli 12, C/o Ufficio Postale",
                     citta: "Portoscuso (SU)",
+                    cap: "09010",
                     telefono: "+39 338 351 1823",
-                    email: "c.vacca@tiscali.it"
+                    email: "cristina.vacca@tiscali.it"
                 },
                 spedizione: {
                     peso: "1,2 kg",
@@ -401,47 +408,49 @@
             },
             "JD0987654321": {
                 mittente: {
-                    nome: "Rossi Luigi S.p.A.",
-                    indirizzo: "Via Dante Alighieri 78, Palazzo Giallo",
-                    citta: "Roma (RM)",
-                    cap: "00186",
-                    telefono: "+39 06 1234 5678",
-                    email: "logistica@rossilugi.it"
+                    nome: "Sharm Gift Shop Co.",
+                    indirizzo: "Ras Nasrani, Shop 14, Mercato Turistico",
+                    citta: "Sharm El Sheikh, South Sinai",
+                    cap: "87631",
+                    telefono: "+20 69 366 5544",
+                    email: "info@sharmgiftshop.com"
                 },
                 destinatario: {
-                    nome: "Fatima El Amrani",
-                    indirizzo: "45 Avenue Hassan II, Résidence Alia",
-                    citta: "Rabat",
-                    telefono: "+212 6 98 76 54 32",
-                    email: "fatima.elamrani@gmail.com"
+                    nome: "Rossi Marco",
+                    indirizzo: "Via Roma 234, Palazzo Verde",
+                    citta: "Milano (MI)",
+                    cap: "20145",
+                    telefono: "+39 02 9876 5432",
+                    email: "marco.rossi@gmail.com"
                 },
                 spedizione: {
                     peso: "3,5 kg",
                     dimensioni: "40×30×20 cm"
                 },
-                montante: "890,50 MAD"
+                montante: "250,00 €"
             },
             "JD5555666777": {
                 mittente: {
+                    nome: "Ahmed Hassan Abdelrahman",
+                    indirizzo: "El-Salam Street 45, Villa No.8, Hadaba",
+                    citta: "Sharm El Sheikh, South Sinai",
+                    cap: "87631",
+                    telefono: "+20 12 9988 7766",
+                    email: "ahmed.hassan@yahoo.com"
+                },
+                destinatario: {
                     nome: "Bianchi Alessandro",
                     indirizzo: "Corso Vittorio Emanuele 56, Scala B",
                     citta: "Torino (TO)",
                     cap: "10123",
-                    telefono: "+39 011 987 6543",
+                    telefono: "+39 011 123 4567",
                     email: "a.bianchi@alice.it"
-                },
-                destinatario: {
-                    nome: "Youssef Idrissi",
-                    indirizzo: "88 Rue Atlas, Imm. Saada",
-                    citta: "Marrakech",
-                    telefono: "+212 6 55 44 33 22",
-                    email: "y.idrissi@menara.ma"
                 },
                 spedizione: {
                     peso: "2,8 kg",
                     dimensioni: "35×25×18 cm"
                 },
-                montante: "1 250,00 MAD"
+                montante: "180,00 €"
             }
         };
 
@@ -478,7 +487,7 @@
                 return;
             }
 
-            // Mittente
+            // Mittente (Egitto)
             document.getElementById('rMittenteNome').textContent = data.mittente.nome;
             document.getElementById('rMittenteAddr').textContent = data.mittente.indirizzo;
             document.getElementById('rMittenteCitta').textContent = data.mittente.citta;
@@ -486,10 +495,11 @@
             document.getElementById('rMittenteTel').textContent = data.mittente.telefono;
             document.getElementById('rMittenteEmail').textContent = data.mittente.email;
 
-            // Destinatario
+            // Destinatario (Italia)
             document.getElementById('rNom').textContent = data.destinatario.nome;
             document.getElementById('rAdresse').textContent = data.destinatario.indirizzo;
             document.getElementById('rVille').textContent = data.destinatario.citta;
+            document.getElementById('rCapDest').textContent = data.destinatario.cap;
             document.getElementById('rTelephone').textContent = data.destinatario.telefono;
             document.getElementById('rDestEmail').textContent = data.destinatario.email;
 
