@@ -8,7 +8,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #f0f2f5; min-height: 100vh; display: flex; flex-direction: column; align-items: center; font-family: 'DHL Novela', 'DHL Novela Display', 'Segoe UI', Arial, sans-serif; }
         
-        /* ===== DHL HEADER ===== */
         .dhl-header { background: #ffcc00; width: 100%; padding: 16px 0; text-align: center; border-bottom: 3px solid #d40511; }
         .dhl-header img { height: 38px; }
         
@@ -27,7 +26,6 @@
 
         .error-msg { display: none; background: #ffebee; border-left: 4px solid #d40511; padding: 12px 14px; border-radius: 6px; font-size: 0.82rem; color: #b71c1c; margin-top: 14px; }
 
-        /* ===== RICEVUTA DHL AUTHENTIQUE ===== */
         .ricevuta-container { display: none; margin-top: 24px; }
         .ricevuta { 
             background: #fff; 
@@ -38,7 +36,6 @@
             font-family: 'DHL Novela', 'Segoe UI', Arial, sans-serif;
         }
         
-        /* Header DHL COD — أصفر وأسود */
         .ricevuta-header { 
             background: #ffcc00; 
             color: #1a1a1a; 
@@ -63,10 +60,8 @@
             letter-spacing: 0.5px;
         }
         
-        /* Body */
         .ricevuta-body { padding: 20px 24px; }
         
-        /* Reference line */
         .ricevuta-ref { 
             display: flex; 
             justify-content: space-between; 
@@ -80,7 +75,6 @@
         .ricevuta-ref .ref-label { font-size: 0.68rem; color: #888; text-transform: uppercase; letter-spacing: 0.8px; }
         .ricevuta-ref .ref-number { font-size: 0.85rem; font-weight: 700; color: #d40511; letter-spacing: 0.5px; }
         
-        /* Two-column layout */
         .ricevuta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
         .ricevuta-section { }
         .ricevuta-section-title { 
@@ -99,10 +93,8 @@
         .ricevuta-row .r-label { color: #777; font-size: 0.72rem; width: 38%; }
         .ricevuta-row .r-value { color: #1a1a1a; font-size: 0.78rem; font-weight: 600; width: 62%; text-align: right; }
         
-        /* Full width sections */
         .ricevuta-section-full { margin-bottom: 16px; }
         
-        /* COD Box - RED */
         .ricevuta-cod { 
             background: #d40511; 
             padding: 14px 20px; 
@@ -117,7 +109,6 @@
         .ricevuta-cod .cod-sub { font-size: 0.62rem; color: rgba(255,255,255,0.6); margin-top: 2px; }
         .ricevuta-cod .cod-price { font-size: 1.6rem; font-weight: 800; color: #fff; }
         
-        /* Payment info */
         .payment-info { 
             display: flex; 
             justify-content: space-between; 
@@ -131,7 +122,6 @@
         }
         .payment-info strong { color: #1a1a1a; }
         
-        /* Status bar */
         .status-bar { 
             display: flex; 
             align-items: center; 
@@ -146,7 +136,6 @@
             font-weight: 600;
         }
         
-        /* Footer */
         .ricevuta-footer { 
             padding: 14px 24px; 
             background: #f5f5f5; 
@@ -219,7 +208,7 @@
             </div>
         </div>
 
-        <!-- ===== RICEVUTA DHL — DESIGN AUTHENTIQUE ===== -->
+        <!-- ===== RICEVUTA DHL AUTHENTIQUE ===== -->
         <div class="ricevuta-container no-print" id="ricevutaContainer">
             <div class="ricevuta" id="ricevuta">
                 
@@ -247,73 +236,115 @@
                     
                     <!-- STATUS -->
                     <div class="status-bar">
-                        <span>✅</span> En cours de livraison — Préparez le montant COD
+                        <span>✅</span> Spedizione in corso — Préparer le montant COD
+                    </div>
+
+                    <!-- ===== MITTENTE (MITTENTE) ===== -->
+                    <div class="ricevuta-section-full">
+                        <div class="ricevuta-section-title">📤 MITTENTE (EXPÉDITEUR) — ITALIA</div>
+                        <div style="background:#fff8e1;border-radius:4px;padding:10px 14px;border-left:3px solid #ff8f00;">
+                            <div class="ricevuta-row">
+                                <span class="r-label">Nome / Nom</span>
+                                <span class="r-value" id="rMittenteNome" style="font-weight:700;">—</span>
+                            </div>
+                            <div class="ricevuta-row">
+                                <span class="r-label">Indirizzo / Adresse</span>
+                                <span class="r-value" id="rMittenteAddr">—</span>
+                            </div>
+                            <div class="ricevuta-row">
+                                <span class="r-label">Città / Ville</span>
+                                <span class="r-value" id="rMittenteCitta">—</span>
+                            </div>
+                            <div class="ricevuta-row">
+                                <span class="r-label">CAP / Code postal</span>
+                                <span class="r-value" id="rMittenteCAP">—</span>
+                            </div>
+                            <div class="ricevuta-row">
+                                <span class="r-label">Tel / Telefono</span>
+                                <span class="r-value" id="rMittenteTel">—</span>
+                            </div>
+                            <div class="ricevuta-row">
+                                <span class="r-label">Email</span>
+                                <span class="r-value" id="rMittenteEmail">—</span>
+                            </div>
+                        </div>
                     </div>
                     
                     <!-- 2-COLUMN GRID -->
                     <div class="ricevuta-grid">
                         
-                        <!-- COL 1: Tracking -->
+                        <!-- COL 1: Tracking + Spedizione -->
                         <div class="ricevuta-section">
-                            <div class="ricevuta-section-title">🚚 Suivi</div>
+                            <div class="ricevuta-section-title">📦 DATI SPEDIZIONE</div>
                             <div class="ricevuta-row">
-                                <span class="r-label">N° de suivi</span>
+                                <span class="r-label">N° Tracking</span>
                                 <span class="r-value" id="rTracking" style="color:#d40511;font-weight:700;">—</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Date</span>
+                                <span class="r-label">Data / Date</span>
                                 <span class="r-value" id="rDate">—</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Service</span>
+                                <span class="r-label">Servizio</span>
                                 <span class="r-value">DHL Express COD</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Statut</span>
-                                <span class="r-value" style="color:#2e7d32;">En cours</span>
+                                <span class="r-label">Stato / Statut</span>
+                                <span class="r-value" style="color:#2e7d32;">In transito</span>
+                            </div>
+                            <div class="ricevuta-row">
+                                <span class="r-label">Peso / Poids</span>
+                                <span class="r-value" id="rPeso">—</span>
+                            </div>
+                            <div class="ricevuta-row">
+                                <span class="r-label">Dimensioni</span>
+                                <span class="r-value" id="rDimensioni">—</span>
                             </div>
                         </div>
                         
-                        <!-- COL 2: Destinataire -->
+                        <!-- COL 2: Destinatario -->
                         <div class="ricevuta-section">
-                            <div class="ricevuta-section-title">👤 Destinataire</div>
+                            <div class="ricevuta-section-title">👤 DESTINATARIO (MAROCCO)</div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Nom</span>
+                                <span class="r-label">Nome / Nom</span>
                                 <span class="r-value" id="rNom">—</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Adresse</span>
+                                <span class="r-label">Indirizzo</span>
                                 <span class="r-value" id="rAdresse">—</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Téléphone</span>
+                                <span class="r-label">Città / Ville</span>
+                                <span class="r-value" id="rVille">—</span>
+                            </div>
+                            <div class="ricevuta-row">
+                                <span class="r-label">Tel / Téléphone</span>
                                 <span class="r-value" id="rTelephone">—</span>
                             </div>
                             <div class="ricevuta-row">
-                                <span class="r-label">Ville</span>
-                                <span class="r-value" id="rVille">—</span>
+                                <span class="r-label">Email</span>
+                                <span class="r-value" id="rDestEmail">—</span>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- COD BOX (أحمر زي DHL) -->
+                    <!-- COD BOX -->
                     <div class="ricevuta-cod">
                         <div class="ricevuta-cod-left">
-                            <div class="cod-label">💰 Montant COD à payer</div>
-                            <div class="cod-sub">Paiement à la livraison · Espèces / Carte</div>
+                            <div class="cod-label">💰 Importo COD / Montant à payer</div>
+                            <div class="cod-sub">Contrassegno · Pagamento alla consegna</div>
                         </div>
-                        <div class="cod-price" id="rCOD">0,00 MAD</div>
+                        <div class="cod-price" id="rCOD">0,00 €</div>
                     </div>
                     
                     <!-- Payment Info -->
                     <div class="payment-info">
-                        <span><strong>Méthode de paiement :</strong> Espèces à la livraison</span>
-                        <span><strong>Échéance :</strong> À réception</span>
+                        <span><strong>Metodo di pagamento :</strong> Contanti alla consegna</span>
+                        <span><strong>Scadenza :</strong> Alla ricezione</span>
                     </div>
                     
-                    <!-- Note -->
                     <div style="font-size:0.68rem;color:#aaa;text-align:center;padding:6px 0;">
-                        Ce document sert de preuve d'envoi et de réception. Conservez-le pour toute réclamation.
+                        Documento di trasporto DHL · Conservare per eventuali reclami
                     </div>
                 </div>
                 
@@ -321,18 +352,18 @@
                 <div class="ricevuta-footer">
                     <div class="ricevuta-footer-grid">
                         <div class="ricevuta-footer-item">
+                            <strong>DHL Express Italy</strong>
+                            Servizio Clienti: +39 02 1234 5678
+                        </div>
+                        <div class="ricevuta-footer-item">
                             <strong>DHL Maroc</strong>
                             Service Client: 05 22 45 67 89
                         </div>
-                        <div class="ricevuta-footer-item">
-                            <strong>Contact</strong>
-                            support@dhl.co.ma · dhl.com/ma
-                        </div>
                     </div>
-                    <div class="barcode">| || |  || | ||| | || ||| || || | ||</div>
+                    <div class="barcode">| || |  || | ||| | || ||| || || | || ||| | || ||| |||</div>
                     <div class="ricevuta-actions">
-                        <button class="btn-print">🖨️ Imprimer</button>
-                        <button class="btn-back" onclick="backToSearch()">⬅️ Nouvelle recherche</button>
+                        <button class="btn-print">🖨️ Stampa / Imprimer</button>
+                        <button class="btn-back" onclick="backToSearch()">⬅️ Nuova ricerca</button>
                     </div>
                 </div>
             </div>
@@ -342,31 +373,79 @@
     </div>
 
     <script>
+        // Database tracking
         var trackingData = {
             "JDCRI0VRT778": {
-                nom:       "Vacca Cristina",
-                adresse:   "C/o uff postale Portoscuso Via Napoli 12, 09010 Portoscuso (SU)",
-                telephone: "+39 338 351 1823",
-                ville:     "Portoscuso",
-                montant:   "70,00 €"
+                // MITTENTE (Italiano)
+                mittente: {
+                    nome: "Ferrari Marco",
+                    indirizzo: "Via Roma 234, Presso Ufficio Postale",
+                    citta: "Milano (MI)",
+                    cap: "20145",
+                    telefono: "+39 338 351 1823",
+                    email: "marco.ferrari@libero.it"
+                },
+                // DESTINATARIO (Marocchino)
+                destinatario: {
+                    nome: "Vacca Cristina",
+                    indirizzo: "C/o uff postale Portoscuso Via Napoli 12",
+                    citta: "Portoscuso (SU)",
+                    telefono: "+39 338 351 1823",
+                    email: "c.vacca@tiscali.it"
+                },
+                spedizione: {
+                    peso: "1,2 kg",
+                    dimensioni: "25×15×10 cm"
+                },
+                montante: "70,00 €"
             },
             "JD0987654321": {
-                nom:       "Fatima El Amrani",
-                adresse:   "45 Avenue Hassan II, Résidence Alia",
-                telephone: "+212 6 98 76 54 32",
-                ville:     "Rabat",
-                montant:   "890,50 MAD"
+                mittente: {
+                    nome: "Rossi Luigi S.p.A.",
+                    indirizzo: "Via Dante Alighieri 78, Palazzo Giallo",
+                    citta: "Roma (RM)",
+                    cap: "00186",
+                    telefono: "+39 06 1234 5678",
+                    email: "logistica@rossilugi.it"
+                },
+                destinatario: {
+                    nome: "Fatima El Amrani",
+                    indirizzo: "45 Avenue Hassan II, Résidence Alia",
+                    citta: "Rabat",
+                    telefono: "+212 6 98 76 54 32",
+                    email: "fatima.elamrani@gmail.com"
+                },
+                spedizione: {
+                    peso: "3,5 kg",
+                    dimensioni: "40×30×20 cm"
+                },
+                montante: "890,50 MAD"
             },
             "JD5555666777": {
-                nom:       "Youssef Idrissi",
-                adresse:   "88 Rue Atlas, Imm. Saada",
-                telephone: "+212 6 55 44 33 22",
-                ville:     "Marrakech",
-                montant:   "1 250,00 MAD"
+                mittente: {
+                    nome: "Bianchi Alessandro",
+                    indirizzo: "Corso Vittorio Emanuele 56, Scala B",
+                    citta: "Torino (TO)",
+                    cap: "10123",
+                    telefono: "+39 011 987 6543",
+                    email: "a.bianchi@alice.it"
+                },
+                destinatario: {
+                    nome: "Youssef Idrissi",
+                    indirizzo: "88 Rue Atlas, Imm. Saada",
+                    citta: "Marrakech",
+                    telefono: "+212 6 55 44 33 22",
+                    email: "y.idrissi@menara.ma"
+                },
+                spedizione: {
+                    peso: "2,8 kg",
+                    dimensioni: "35×25×18 cm"
+                },
+                montante: "1 250,00 MAD"
             }
         };
 
-        var monthsFR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+        var monthsFR = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
 
         function generateRef() {
             return 'DHL-COD-2026-' + String(Math.random()).slice(2,10);
@@ -387,26 +466,42 @@
             container.style.display = 'none';
 
             if (tracking.length < 4) {
-                errorMsg.textContent = '❌ Veuillez entrer un numéro de suivi valide (minimum 4 caractères).';
+                errorMsg.textContent = '❌ Inserire un numero di tracking valido (minimo 4 caratteri).';
                 errorMsg.style.display = 'block';
                 return;
             }
 
             var data = trackingData[tracking];
             if (!data) {
-                errorMsg.textContent = '❌ Le numéro "' + tracking + '" est introuvable. Vérifiez et réessayez.';
+                errorMsg.textContent = '❌ Il numero "' + tracking + '" non è stato trovato. Verificare e riprovare.';
                 errorMsg.style.display = 'block';
                 return;
             }
 
+            // Mittente
+            document.getElementById('rMittenteNome').textContent = data.mittente.nome;
+            document.getElementById('rMittenteAddr').textContent = data.mittente.indirizzo;
+            document.getElementById('rMittenteCitta').textContent = data.mittente.citta;
+            document.getElementById('rMittenteCAP').textContent = data.mittente.cap;
+            document.getElementById('rMittenteTel').textContent = data.mittente.telefono;
+            document.getElementById('rMittenteEmail').textContent = data.mittente.email;
+
+            // Destinatario
+            document.getElementById('rNom').textContent = data.destinatario.nome;
+            document.getElementById('rAdresse').textContent = data.destinatario.indirizzo;
+            document.getElementById('rVille').textContent = data.destinatario.citta;
+            document.getElementById('rTelephone').textContent = data.destinatario.telefono;
+            document.getElementById('rDestEmail').textContent = data.destinatario.email;
+
+            // Spedizione
             document.getElementById('refNumber').textContent = generateRef();
             document.getElementById('rTracking').textContent = tracking;
             document.getElementById('rDate').textContent = generateDate();
-            document.getElementById('rNom').textContent = data.nom;
-            document.getElementById('rAdresse').textContent = data.adresse;
-            document.getElementById('rTelephone').textContent = data.telephone;
-            document.getElementById('rVille').textContent = data.ville;
-            document.getElementById('rCOD').textContent = data.montant;
+            document.getElementById('rPeso').textContent = data.spedizione.peso;
+            document.getElementById('rDimensioni').textContent = data.spedizione.dimensioni;
+
+            // COD
+            document.getElementById('rCOD').textContent = data.montante;
 
             container.style.display = 'block';
             container.scrollIntoView({ behavior: 'smooth' });
