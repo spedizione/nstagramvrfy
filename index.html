@@ -1,372 +1,668 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Banque Populaire • Virement</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; }
-    body {
-      background: linear-gradient(145deg, #f5f7fa 0%, #e4e9f0 100%);
-      min-height: 100dvh; display: flex; justify-content: center; align-items: center; padding: 16px;
-    }
-    .app {
-      max-width: 400px; width: 100%; background: #ffffff;
-      border-radius: 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.02);
-      overflow: hidden; position: relative;
-    }
-    /* Status Bar */
-    .status-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 20px 6px; color: #1a1d23; font-size: 13px; font-weight: 600;
-    }
-    .status-bar .time { font-weight: 700; font-size: 15px; }
-    .status-icons { display: flex; gap: 6px; align-items: center; }
-    .status-icons svg { width: 16px; height: 16px; fill: #1a1d23; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHL Express Maroc - Suivi COD</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #e8ecf1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
 
-    /* Header */
-    .header {
-      padding: 16px 20px 12px; display: flex; align-items: center; gap: 12px;
-    }
-    .header .back { width: 32px; height: 32px; border-radius: 50%; background: #f2f4f8; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .header .back svg { width: 18px; height: 18px; fill: #1a1d23; }
-    .header h1 { font-size: 18px; font-weight: 700; color: #1a1d23; flex: 1; }
-    .header .logout { color: #d93025; font-size: 13px; font-weight: 600; cursor: pointer; }
+        /* ===== DHL HEADER ===== */
+        .dhl-band {
+            background: #ffcc00;
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            border-bottom: 4px solid #d40511;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .dhl-band img {
+            height: 36px;
+        }
 
-    /* Balance Card */
-    .balance-card {
-      background: linear-gradient(135deg, #1a1d23 0%, #2d3139 100%);
-      margin: 8px 20px 20px; border-radius: 20px; padding: 24px; color: white;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    }
-    .balance-card .label { font-size: 13px; opacity: 0.7; letter-spacing: 0.3px; }
-    .balance-card .amount { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin-top: 4px; }
-    .balance-card .amount span { font-size: 18px; font-weight: 500; opacity: 0.8; }
-    .balance-card .account { font-size: 12px; opacity: 0.5; margin-top: 6px; letter-spacing: 0.5px; }
+        .wrapper {
+            width: 100%;
+            max-width: 520px;
+            padding: 24px 16px;
+            flex: 1;
+        }
 
-    /* Transfer Box */
-    .transfer-box {
-      background: #f8f9fb; margin: 0 20px 20px; border-radius: 18px; padding: 20px;
-      border: 1px solid #e8eaed;
-    }
-    .transfer-box .field { margin-bottom: 14px; }
-    .transfer-box label { display: block; font-size: 12px; font-weight: 600; color: #5f6368; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .transfer-box .value-display {
-      background: white; border: 1px solid #e0e3e8; border-radius: 12px; padding: 12px 14px;
-      font-size: 16px; font-weight: 500; color: #1a1d23; display: flex; justify-content: space-between; align-items: center;
-    }
-    .transfer-box .value-display .hint { color: #5f6368; font-size: 13px; font-weight: 400; }
-    .transfer-box .amount-input-area {
-      display: flex; align-items: center; background: white; border: 1px solid #e0e3e8; border-radius: 12px; padding: 8px 14px;
-    }
-    .transfer-box .amount-input-area .cur { font-size: 18px; font-weight: 700; color: #1a1d23; margin-right: 8px; }
-    .transfer-box .amount-input-area input {
-      flex: 1; border: none; outline: none; font-size: 22px; font-weight: 700; color: #1a1d23; background: transparent;
-      width: 100%;
-    }
-    .transfer-box .amount-input-area input::placeholder { color: #c4c7cc; font-weight: 500; }
+        /* ===== SEARCH CARD ===== */
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            padding: 28px 24px;
+            border: 1px solid #eef1f5;
+        }
+        .card h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0b1d2e;
+            margin-bottom: 2px;
+        }
+        .card .sub {
+            font-size: 0.8rem;
+            color: #6f7d95;
+            margin-bottom: 16px;
+        }
+        .card .badge {
+            background: #fef3e0;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            color: #8a6a00;
+            margin-bottom: 18px;
+            border-left: 3px solid #ffcc00;
+        }
+        .search-line {
+            display: flex;
+            gap: 10px;
+        }
+        .search-line input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e2e7ed;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            letter-spacing: 0.8px;
+            font-family: inherit;
+            background: #f8fafc;
+            transition: 0.2s;
+        }
+        .search-line input:focus {
+            border-color: #ffcc00;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(255,204,0,0.15);
+        }
+        .search-line button {
+            background: #d40511;
+            color: #fff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.15s;
+        }
+        .search-line button:hover {
+            background: #b0040e;
+        }
+        .error-box {
+            display: none;
+            background: #fef2f2;
+            border: 1px solid #f9b4b4;
+            border-left: 4px solid #d40511;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: #b91c1c;
+            margin-top: 14px;
+        }
 
-    .btn {
-      width: 100%; padding: 16px; border: none; border-radius: 14px;
-      font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s;
-    }
-    .btn-primary { background: #1a73e8; color: white; }
-    .btn-primary:hover { background: #1557b0; }
-    .btn-primary:disabled { background: #a8c7fa; cursor: default; }
-    .btn-success { background: #1e8e3e; color: white; }
-    .btn-success:hover { background: #166b2f; }
+        /* ================================================================
+           RICEVUTA DHL — TOUTE JAUNE (AUTHENTIQUE)
+           ================================================================ */
+        .ricevuta-wrap {
+            display: none;
+            margin-top: 28px;
+            animation: fadeSlide 0.4s ease;
+        }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .divider { height: 1px; background: #e8eaed; margin: 12px 0; }
+        .ricevuta {
+            background: #ffcc00;
+            border-radius: 6px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            border: 2px solid #d40511;
+            overflow: hidden;
+            font-size: 0.78rem;
+            color: #1a1a1a;
+        }
 
-    /* Step management */
-    .step { display: none; }
-    .step.active { display: block; }
+        /* --- EN-TÊTE ROUGE DHL --- */
+        .r-header {
+            background: #d40511;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #a0040e;
+        }
+        .r-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .r-header-left img {
+            height: 28px;
+            filter: brightness(0) invert(1);
+        }
+        .r-header-left .r-h-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+        }
+        .r-header-left .r-h-title small {
+            font-weight: 400;
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.75);
+            display: block;
+        }
+        .r-header-right {
+            text-align: right;
+        }
+        .r-header-right .cod-stamp {
+            background: #ffcc00;
+            color: #1a1a1a;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
 
-    /* Processing overlay */
-    .processing-screen {
-      padding: 40px 20px; text-align: center;
-    }
-    .spinner {
-      width: 64px; height: 64px; border-radius: 50%;
-      border: 4px solid #e8eaed; border-top-color: #1a73e8;
-      animation: spin 0.8s linear infinite; margin: 0 auto 20px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+        /* --- CORPS JAUNE --- */
+        .r-body {
+            padding: 18px 20px;
+            background: #ffcc00;
+        }
 
-    .progress-track {
-      background: #e8eaed; height: 6px; border-radius: 6px; margin: 16px 20px; overflow: hidden;
-    }
-    .progress-track .fill {
-      height: 100%; width: 0%; background: linear-gradient(90deg, #1a73e8, #4285f4);
-      border-radius: 6px; transition: width 0.4s ease;
-    }
-    .checklist { text-align: left; max-width: 260px; margin: 16px auto 0; }
-    .checklist .item { display: flex; align-items: center; gap: 10px; margin: 8px 0; color: #5f6368; font-size: 14px; }
-    .checklist .item .dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #dadce0; flex-shrink: 0; }
-    .checklist .item .dot.done { background: #1e8e3e; border-color: #1e8e3e; position: relative; }
-    .checklist .item .dot.done::after { content: '✓'; color: white; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; line-height: 20px; }
-    .checklist .item .dot.active-dot { border-color: #1a73e8; background: #e8f0fe; position: relative; }
-    .checklist .item .dot.active-dot::after { content: ''; width: 8px; height: 8px; background: #1a73e8; border-radius: 50%; position: absolute; top: 4px; left: 4px; }
-    .checklist .item .label { flex: 1; }
+        /* Reference */
+        .r-ref {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.5);
+            padding: 8px 14px;
+            border-radius: 4px;
+            margin-bottom: 14px;
+            border-left: 4px solid #d40511;
+        }
+        .r-ref .r-ref-lbl {
+            font-size: 0.6rem;
+            color: #5a4a00;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-weight: 600;
+        }
+        .r-ref .r-ref-val {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #d40511;
+            letter-spacing: 0.3px;
+        }
 
-    /* Success Screen */
-    .success-screen {
-      padding: 40px 20px 30px; text-align: center;
-    }
-    .success-icon {
-      width: 80px; height: 80px; border-radius: 50%; background: #1e8e3e;
-      display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;
-      animation: popIn 0.5s ease;
-    }
-    .success-icon svg { width: 44px; height: 44px; fill: white; }
-    @keyframes popIn {
-      0% { transform: scale(0); } 60% { transform: scale(1.2); } 100% { transform: scale(1); }
-    }
-    .success-screen h2 { font-size: 22px; font-weight: 700; color: #1a1d23; }
-    .success-screen .amount-big { font-size: 36px; font-weight: 800; color: #1e8e3e; margin: 6px 0; letter-spacing: -1px; }
-    .success-screen .amount-big span { font-size: 18px; }
-    .success-screen p { color: #5f6368; font-size: 14px; margin-top: 4px; line-height: 1.5; }
-    .success-screen .ref { font-size: 12px; color: #9aa0a6; margin-top: 12px; }
-    .success-screen .btn { margin-top: 20px; }
+        /* Status stripe */
+        .r-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 4px;
+            border-left: 4px solid #2e7d32;
+            margin-bottom: 14px;
+            font-size: 0.75rem;
+            color: #1b5e20;
+            font-weight: 600;
+        }
 
-    .hidden { display: none !important; }
-  </style>
+        /* Grid 2 colonnes */
+        .r-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .r-section {
+            background: rgba(255,255,255,0.4);
+            border-radius: 5px;
+            padding: 10px 12px;
+            border: 1px solid rgba(212,5,17,0.15);
+        }
+        .r-section-title {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #d40511;
+            margin-bottom: 6px;
+            padding-bottom: 3px;
+            border-bottom: 2px solid #d40511;
+        }
+        .r-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px dotted rgba(0,0,0,0.08);
+        }
+        .r-row:last-child {
+            border-bottom: none;
+        }
+        .r-row .r-lbl {
+            color: #5a4a00;
+            font-size: 0.65rem;
+            width: 40%;
+            font-weight: 500;
+        }
+        .r-row .r-val {
+            color: #1a1a1a;
+            font-size: 0.7rem;
+            font-weight: 600;
+            width: 60%;
+            text-align: right;
+        }
+        .r-row .r-val.accent {
+            color: #d40511;
+        }
+        .r-row .r-val.green {
+            color: #2e7d32;
+        }
+
+        /* --- COD BOX (ROUGE DHL) --- */
+        .r-cod {
+            background: #d40511;
+            padding: 14px 20px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border: 2px solid #a0040e;
+        }
+        .r-cod-left .cod-lbl {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.9);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-weight: 600;
+        }
+        .r-cod-left .cod-sub {
+            font-size: 0.55rem;
+            color: rgba(255,255,255,0.6);
+            margin-top: 1px;
+        }
+        .r-cod .cod-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        /* Payment info bar */
+        .r-pay {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 4px;
+            margin-bottom: 12px;
+            font-size: 0.62rem;
+            color: #5a4a00;
+            border: 1px solid rgba(212,5,17,0.1);
+        }
+        .r-pay strong {
+            color: #1a1a1a;
+        }
+
+        /* Note */
+        .r-note {
+            font-size: 0.58rem;
+            color: #5a4a00;
+            text-align: center;
+            padding: 4px 0 2px;
+            font-weight: 500;
+        }
+
+        /* --- FOOTER JAUNE --- */
+        .r-footer {
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.3);
+            border-top: 2px solid #d40511;
+        }
+        .r-footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .r-footer-item {
+            font-size: 0.6rem;
+            color: #5a4a00;
+            font-weight: 500;
+        }
+        .r-footer-item strong {
+            color: #1a1a1a;
+            display: block;
+            font-size: 0.65rem;
+        }
+        .r-barcode {
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            letter-spacing: 3px;
+            color: #1a1a1a;
+            text-align: center;
+            padding: 6px 0;
+            border-top: 1px dashed rgba(0,0,0,0.15);
+            word-break: break-all;
+        }
+
+        /* --- ACTIONS --- */
+        .r-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .r-actions button {
+            padding: 9px 18px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: inherit;
+            transition: 0.15s;
+        }
+        .r-actions .r-print {
+            background: #d40511;
+            border: none;
+            color: #fff;
+            border: 2px solid #a0040e;
+        }
+        .r-actions .r-print:hover {
+            background: #b0040e;
+        }
+        .r-actions .r-back {
+            background: rgba(255,255,255,0.5);
+            border: 2px solid #d40511;
+            color: #1a1a1a;
+        }
+        .r-actions .r-back:hover {
+            background: rgba(255,255,255,0.8);
+        }
+
+        .footer-legal {
+            font-size: 0.6rem;
+            color: #a0b0c4;
+            text-align: center;
+            margin-top: 16px;
+            padding: 8px;
+        }
+
+        @media print {
+            .dhl-band, .card, .r-actions, .footer-legal { display: none !important; }
+            .ricevuta-wrap { display: block !important; }
+            .ricevuta { box-shadow: none; }
+        }
+
+        @media (max-width: 480px) {
+            .r-grid { grid-template-columns: 1fr; }
+            .r-header { flex-direction: column; text-align: center; gap: 6px; }
+            .r-header-right { text-align: center; }
+            .r-cod { flex-direction: column; text-align: center; gap: 4px; }
+            .r-footer-grid { grid-template-columns: 1fr; }
+            .search-line { flex-direction: column; }
+            .wrapper { padding: 16px 12px; }
+            .card { padding: 20px 16px; }
+            .r-body { padding: 14px 16px; }
+        }
+    </style>
 </head>
 <body>
-<div class="app">
-  <!-- Status Bar -->
-  <div class="status-bar">
-    <span class="time" id="statusTime">09:41</span>
-    <div class="status-icons">
-      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
-    </div>
-  </div>
 
-  <!-- Header -->
-  <div class="header">
-    <div class="back"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></div>
-    <h1>Virement</h1>
-    <div class="logout">Quitter</div>
-  </div>
-
-  <!-- STEP 0: Main Transfer Screen -->
-  <div class="step active" id="step0">
-    <div class="balance-card">
-      <div class="label">Compte courant • 1234 56XX XXXX 7890</div>
-      <div class="amount" id="balanceDisplay">3,847<span>.42 €</span></div>
-      <div class="account">IBAN: FR76 3000 4005 6000 1234 5678 901</div>
+    <!-- DHL TOP BAND -->
+    <div class="dhl-band">
+        <img src="https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg" alt="DHL">
     </div>
 
-    <div class="transfer-box">
-      <div class="field">
-        <label>Bénéficiaire</label>
-        <div class="value-display">
-          <span>MOHAMMED EL AMRANI</span>
-          <span class="hint">✓ Confirmé</span>
+    <div class="wrapper">
+
+        <!-- SEARCH CARD -->
+        <div class="card" id="searchCard">
+            <h2>Suivi de colis COD</h2>
+            <p class="sub">Entrez votre numéro de suivi DHL pour consulter votre reçu</p>
+            <div class="badge">🔒 Service DHL Maroc — Paiement à la livraison (COD)</div>
+            <form id="searchForm">
+                <div class="search-line">
+                    <input type="text" id="trackingInput" placeholder="Ex: JD1234567890" autocomplete="off">
+                    <button type="submit">Rechercher</button>
+                </div>
+            </form>
+            <div class="error-box" id="errorMsg">
+                ❌ Numéro de suivi introuvable. Veuillez vérifier et réessayer.
+            </div>
         </div>
-      </div>
-      <div class="field">
-        <label>IBAN</label>
-        <div class="value-display">
-          <span>FR76 1000 2000 3000 4000 5000 678</span>
+
+        <!-- ===== RICEVUTA DHL — JAUNE AUTHENTIQUE ===== -->
+        <div class="ricevuta-wrap" id="ricevutaWrap">
+            <div class="ricevuta" id="ricevuta">
+
+                <!-- HEADER ROUGE (contraste) -->
+                <div class="r-header">
+                    <div class="r-header-left">
+                        <img src="https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg" alt="DHL">
+                        <div class="r-h-title">
+                            BON DE LIVRAISON · REÇU COD
+                            <small>DHL Express Maroc — Document officiel</small>
+                        </div>
+                    </div>
+                    <div class="r-header-right">
+                        <span class="cod-stamp">PAIEMENT À LA LIVRAISON</span>
+                    </div>
+                </div>
+
+                <div class="r-body">
+
+                    <!-- REF -->
+                    <div class="r-ref">
+                        <span class="r-ref-lbl">Référence DHL</span>
+                        <span class="r-ref-val" id="refNumber">DHL-COD-2026-XXXXXXXX</span>
+                    </div>
+
+                    <!-- STATUS -->
+                    <div class="r-status">
+                        <span>✅</span>
+                        <span id="statusText">En cours de livraison — Préparez le montant COD</span>
+                    </div>
+
+                    <!-- 2-COLUMN GRID -->
+                    <div class="r-grid">
+
+                        <!-- LEFT: Tracking -->
+                        <div class="r-section">
+                            <div class="r-section-title">🚚 Suivi</div>
+                            <div class="r-row">
+                                <span class="r-lbl">N° de suivi</span>
+                                <span class="r-val accent" id="rTracking">—</span>
+                            </div>
+                            <div class="r-row">
+                                <span class="r-lbl">Date</span>
+                                <span class="r-val" id="rDate">—</span>
+                            </div>
+                            <div class="r-row">
+                                <span class="r-lbl">Service</span>
+                                <span class="r-val">DHL Express COD</span>
+                            </div>
+                            <div class="r-row">
+                                <span class="r-lbl">Statut</span>
+                                <span class="r-val green" id="rStatut">En cours</span>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT: Destinataire -->
+                        <div class="r-section">
+                            <div class="r-section-title">👤 Destinataire</div>
+                            <div class="r-row">
+                                <span class="r-lbl">Nom</span>
+                                <span class="r-val" id="rNom">—</span>
+                            </div>
+                            <div class="r-row">
+                                <span class="r-lbl">Adresse</span>
+                                <span class="r-val" id="rAdresse">—</span>
+                            </div>
+                            <div class="r-row">
+                                <span class="r-lbl">Téléphone</span>
+                                <span class="r-val" id="rTel">—</span>
+                            </div>
+                            <div class="r-row">
+                                <span class="r-lbl">Ville</span>
+                                <span class="r-val" id="rVille">—</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COD BOX (ROUGE) -->
+                    <div class="r-cod">
+                        <div class="r-cod-left">
+                            <div class="cod-lbl">💰 Montant COD à payer</div>
+                            <div class="cod-sub">Paiement à la livraison · Espèces / Carte</div>
+                        </div>
+                        <div class="cod-price" id="rCOD">0,00 MAD</div>
+                    </div>
+
+                    <!-- PAYMENT INFO -->
+                    <div class="r-pay">
+                        <span><strong>Méthode :</strong> Espèces à la livraison</span>
+                        <span><strong>Échéance :</strong> À réception</span>
+                    </div>
+
+                    <div class="r-note">
+                        Ce document sert de preuve d'envoi et de réception. Conservez-le pour toute réclamation.
+                    </div>
+                </div>
+
+                <!-- FOOTER -->
+                <div class="r-footer">
+                    <div class="r-footer-grid">
+                        <div class="r-footer-item">
+                            <strong>DHL Maroc</strong>
+                            Service Client: 05 22 45 67 89
+                        </div>
+                        <div class="r-footer-item">
+                            <strong>Contact</strong>
+                            support@dhl.co.ma · dhl.com/ma
+                        </div>
+                    </div>
+                    <div class="r-barcode">| || |  || | ||| | || ||| || || | ||</div>
+                    <div class="r-actions">
+                        <button class="r-print">🖨️ Imprimer</button>
+                        <button class="r-back" onclick="backToSearch()">⬅️ Nouvelle recherche</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
-      </div>
-      <div class="field">
-        <label>Montant à transférer</label>
-        <div class="amount-input-area">
-          <span class="cur">€</span>
-          <input type="number" id="amountInput" placeholder="0,00" step="0.01" min="0" />
-        </div>
-      </div>
-      <div class="field">
-        <label>Motif (optionnel)</label>
-        <div class="value-display">
-          <span>Remboursement • Facture #2481</span>
-        </div>
-      </div>
 
-      <div class="divider"></div>
-
-      <button class="btn btn-primary" id="transferBtn" onclick="startTransfer()">
-        Transférer
-      </button>
-      <p style="text-align:center;color:#9aa0a6;font-size:12px;margin-top:8px;">Frais : 0,00 € • Délai : immédiat</p>
+        <div class="footer-legal">© 2026 DHL International GmbH. All rights reserved.</div>
     </div>
-  </div>
 
-  <!-- STEP 1: Processing -->
-  <div class="step" id="step1">
-    <div class="processing-screen">
-      <div class="spinner"></div>
-      <h2 style="font-size:20px;font-weight:700;color:#1a1d23;" id="processingTitle">Traitement en cours</h2>
-      <p style="color:#5f6368;font-size:14px;margin-top:4px;" id="processingSub">Veuillez patienter...</p>
-      
-      <div class="progress-track"><div class="fill" id="progressFill"></div></div>
+    <script>
+        // === DONNÉES ===
+        var trackingData = {
+            "JDCRI0VRT778": {
+                nom:       "Vacca Cristina",
+                adresse:   "C/o uff postale Portoscuso Via Napoli 12, 09010 Portoscuso (SU)",
+                telephone: "+39 338 351 1823",
+                ville:     "Portoscuso",
+                montant:   "70,00 €"
+            },
+            "JD0987654321": {
+                nom:       "Fatima El Amrani",
+                adresse:   "45 Avenue Hassan II, Résidence Alia",
+                telephone: "+212 6 98 76 54 32",
+                ville:     "Rabat",
+                montant:   "890,50 MAD"
+            },
+            "JD5555666777": {
+                nom:       "Youssef Idrissi",
+                adresse:   "88 Rue Atlas, Imm. Saada",
+                telephone: "+212 6 55 44 33 22",
+                ville:     "Marrakech",
+                montant:   "1 250,00 MAD"
+            }
+        };
 
-      <div class="checklist">
-        <div class="item"><div class="dot" id="cl1"></div><span class="label" id="cl1label">Vérification du compte</span></div>
-        <div class="item"><div class="dot" id="cl2"></div><span class="label" id="cl2label">Authentification du bénéficiaire</span></div>
-        <div class="item"><div class="dot" id="cl3"></div><span class="label" id="cl3label">Validation du montant (1.000,00 €)</span></div>
-        <div class="item"><div class="dot" id="cl4"></div><span class="label" id="cl4label">Transfert vers le compte externe</span></div>
-        <div class="item"><div class="dot" id="cl5"></div><span class="label" id="cl5label">Confirmation bancaire</span></div>
-      </div>
-    </div>
-  </div>
+        var monthsFR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
-  <!-- STEP 2: Success -->
-  <div class="step" id="step2">
-    <div class="success-screen">
-      <div class="success-icon">
-        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-      </div>
-      <h2>Virement effectué</h2>
-      <div class="amount-big">+1.000<span>,00 €</span></div>
-      <p>Le montant de <strong>1.000,00 €</strong> a été transféré avec succès vers le compte de <strong>MOHAMMED EL AMRANI</strong>.</p>
-      <div style="background:#f8f9fb;border-radius:14px;padding:14px;margin-top:16px;text-align:left;">
-        <div style="display:flex;justify-content:space-between;font-size:13px;color:#5f6368;"><span>Référence</span><span style="color:#1a1d23;font-weight:600;" id="refCode">VIR-2024-XXXX-XXXX</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;color:#5f6368;margin-top:6px;"><span>Date</span><span style="color:#1a1d23;" id="dateDisplay">16/06/2026</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;color:#5f6368;margin-top:6px;"><span>Statut</span><span style="color:#1e8e3e;font-weight:600;">Confirmé ✓</span></div>
-      </div>
-      <p class="ref">Transaction irréversible • Code : <span id="txRef">0x8A3F</span></p>
-      <button class="btn btn-success" onclick="resetApp()">Nouveau virement</button>
-    </div>
-  </div>
-</div>
+        function generateRef() {
+            return 'DHL-COD-2026-' + String(Math.random()).slice(2,10);
+        }
 
-<script>
-  let timers = [];
-  let amountValue = 0;
+        function generateDate() {
+            var d = new Date();
+            return String(d.getDate()).padStart(2,'0') + ' ' + monthsFR[d.getMonth()] + ' ' + d.getFullYear();
+        }
 
-  function updateTime() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    document.getElementById('statusTime').textContent = h + ':' + m;
-  }
-  updateTime();
-  setInterval(updateTime, 30000);
+        // === FORM SUBMIT ===
+        document.getElementById('searchForm').onsubmit = function(e) {
+            e.preventDefault();
+            var tracking = document.getElementById('trackingInput').value.trim().toUpperCase();
+            var errorMsg = document.getElementById('errorMsg');
+            var wrap = document.getElementById('ricevutaWrap');
 
-  // Add comma/space formatting on input
-  document.getElementById('amountInput').addEventListener('input', function(e) {
-    this.value = this.value.replace(/[^0-9.,]/g, '');
-  });
+            errorMsg.style.display = 'none';
+            wrap.style.display = 'none';
 
-  function startTransfer() {
-    const input = document.getElementById('amountInput');
-    const raw = input.value.replace(',', '.');
-    const val = parseFloat(raw);
+            if (tracking.length < 4) {
+                errorMsg.textContent = '❌ Veuillez entrer un numéro de suivi valide (minimum 4 caractères).';
+                errorMsg.style.display = 'block';
+                return;
+            }
 
-    if (!val || val <= 0) {
-      input.style.border = '1px solid #d93025';
-      input.focus();
-      return;
-    }
-    input.style.border = 'none';
+            var data = trackingData[tracking];
+            if (!data) {
+                errorMsg.textContent = '❌ Le numéro "' + tracking + '" est introuvable. Vérifiez et réessayez.';
+                errorMsg.style.display = 'block';
+                return;
+            }
 
-    // Force 1000.00 for the display regardless of what user typed
-    amountValue = 1000.00;
+            // Remplir la ricevuta
+            document.getElementById('refNumber').textContent = generateRef();
+            document.getElementById('rTracking').textContent = tracking;
+            document.getElementById('rDate').textContent = generateDate();
+            document.getElementById('rStatut').textContent = 'En cours';
+            document.getElementById('statusText').textContent = 'En cours de livraison — Préparez le montant COD';
+            document.getElementById('rNom').textContent = data.nom;
+            document.getElementById('rAdresse').textContent = data.adresse;
+            document.getElementById('rTel').textContent = data.telephone;
+            document.getElementById('rVille').textContent = data.ville;
+            document.getElementById('rCOD').textContent = data.montant;
 
-    // Switch to processing
-    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-    document.getElementById('step1').classList.add('active');
+            wrap.style.display = 'block';
+            wrap.scrollIntoView({ behavior: 'smooth' });
 
-    runProcessing();
-  }
+            document.getElementById('trackingInput').value = '';
+        };
 
-  function runProcessing() {
-    const fill = document.getElementById('progressFill');
-    const cl = [1,2,3,4,5].map(i => document.getElementById('cl' + i));
-    const labels = [1,2,3,4,5].map(i => document.getElementById('cl' + i + 'label'));
+        function backToSearch() {
+            document.getElementById('ricevutaWrap').style.display = 'none';
+            document.getElementById('searchCard').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('trackingInput').focus();
+        }
 
-    // Reset
-    fill.style.width = '0%';
-    cl.forEach(c => { c.className = 'dot'; });
-    labels.forEach(l => l.style.color = '#5f6368');
-
-    let progress = 0;
-
-    function setStep(stepNum) {
-      for (let i = 0; i < cl.length; i++) {
-        if (i < stepNum) { cl[i].className = 'dot done'; labels[i].style.color = '#1e8e3e'; }
-        else if (i === stepNum) { cl[i].className = 'dot active-dot'; labels[i].style.color = '#1a73e8'; }
-        else { cl[i].className = 'dot'; labels[i].style.color = '#5f6368'; }
-      }
-    }
-
-    setStep(0);
-
-    const t = setInterval(() => {
-      progress += Math.random() * 4 + 1.5;
-      if (progress >= 100) { progress = 100; clearInterval(t); }
-
-      fill.style.width = progress + '%';
-
-      if (progress < 15) {
-        setStep(0);
-        document.getElementById('processingTitle').textContent = 'Vérification du compte';
-        document.getElementById('processingSub').textContent = 'Veuillez patienter...';
-      } else if (progress < 30) {
-        setStep(1);
-        document.getElementById('processingTitle').textContent = 'Authentification bénéficiaire';
-        document.getElementById('processingSub').textContent = 'Vérification en cours...';
-      } else if (progress < 50) {
-        setStep(2);
-        document.getElementById('processingTitle').textContent = 'Validation du montant';
-        document.getElementById('processingSub').textContent = 'Montant : 1.000,00 €';
-      } else if (progress < 70) {
-        setStep(3);
-        document.getElementById('processingTitle').textContent = 'Transfert en cours';
-        document.getElementById('processingSub').textContent = 'Envoi vers le compte externe...';
-      } else if (progress < 90) {
-        setStep(4);
-        document.getElementById('processingTitle').textContent = 'Confirmation bancaire';
-        document.getElementById('processingSub').textContent = 'Presque terminé...';
-      } else if (progress >= 99) {
-        setStep(4);
-        document.getElementById('processingTitle').textContent = 'Virement confirmé ✓';
-        document.getElementById('processingSub').textContent = 'Redirection...';
-      }
-
-      if (progress >= 100) {
-        setTimeout(() => showSuccess(), 500);
-      }
-    }, 200);
-    timers.push(t);
-  }
-
-  function showSuccess() {
-    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-    document.getElementById('step2').classList.add('active');
-
-    // Generate references
-    const refNum = 'VIR-2026-' + String(Math.floor(Math.random() * 9000) + 1000) + '-' + String(Math.floor(Math.random() * 9000) + 1000);
-    document.getElementById('refCode').textContent = refNum;
-    document.getElementById('txRef').textContent = '0x' + Math.random().toString(16).substr(2, 8).toUpperCase();
-
-    const now = new Date();
-    const d = String(now.getDate()).padStart(2, '0');
-    const m = String(now.getMonth() + 1).padStart(2, '0');
-    const y = now.getFullYear();
-    document.getElementById('dateDisplay').textContent = d + '/' + m + '/' + y;
-
-    // Update balance to show reduction
-    document.getElementById('balanceDisplay').innerHTML = '2,847<span>.42 €</span>';
-  }
-
-  function resetApp() {
-    timers.forEach(t => clearInterval(t)); timers = [];
-    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-    document.getElementById('step0').classList.add('active');
-    document.getElementById('amountInput').value = '';
-    document.getElementById('balanceDisplay').innerHTML = '3,847<span>.42 €</span>';
-    document.getElementById('progressFill').style.width = '0%';
-    // Reset checkmarks
-    [1,2,3,4,5].forEach(i => {
-      document.getElementById('cl' + i).className = 'dot';
-      document.getElementById('cl' + i + 'label').style.color = '#5f6368';
-    });
-  }
-</script>
+        // === PRINT ===
+        document.querySelector('.r-print').addEventListener('click', function() {
+            window.print();
+        });
+    </script>
 </body>
 </html>
